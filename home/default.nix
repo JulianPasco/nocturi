@@ -85,89 +85,85 @@
   };
 
   # Configure Niri through home-manager
-  programs.niri = {
-    enable = true;
-    package = inputs.niri-flake.packages.${pkgs.system}.niri;
-    
-    settings = {
-      # Set preferred terminal
-      terminal.command = ["kitty"];
-      
-      # XWayland configuration
-      xwayland = {
-        enable = true;
-        use-satellite = true;
-      };
+  xdg.configFile."niri/config.kdl".text = ''
+    // User config file for niri
 
-      # Auto-start Noctilia shell
-      spawn-at-startup = [
-        {
-          command = ["noctalia-shell"];
-        }
-      ];
-      
-      # Focus configuration
-      focus = {
-        # Mouse focus follows the cursor
-        follow-mouse = true;
-      };
-      
-      # Key bindings
-      binds = {
-        keyboard = {
-          # Launcher
-          "logo+R" = "exec rofi -show drun";
-          "logo+Return" = "exec kitty";
-          
-          # Window management
-          "logo+Q" = "close";
-          "logo+F" = "toggle-fullscreen";
-          "logo+E" = "toggle-floating";
-          
-          # Switch workspaces
-          "logo+1" = "workspace 1";
-          "logo+2" = "workspace 2";
-          "logo+3" = "workspace 3";
-          "logo+4" = "workspace 4";
-          "logo+5" = "workspace 5";
-          "logo+6" = "workspace 6";
-          "logo+7" = "workspace 7";
-          "logo+8" = "workspace 8";
-          "logo+9" = "workspace 9";
-          
-          # Move windows to workspaces
-          "logo+shift+1" = "move-window-to-workspace 1";
-          "logo+shift+2" = "move-window-to-workspace 2";
-          "logo+shift+3" = "move-window-to-workspace 3";
-          "logo+shift+4" = "move-window-to-workspace 4";
-          "logo+shift+5" = "move-window-to-workspace 5";
-          "logo+shift+6" = "move-window-to-workspace 6";
-          "logo+shift+7" = "move-window-to-workspace 7";
-          "logo+shift+8" = "move-window-to-workspace 8";
-          "logo+shift+9" = "move-window-to-workspace 9";
-          
-          # Navigation
-          "logo+h" = "focus-column-left";
-          "logo+j" = "focus-window-down";
-          "logo+k" = "focus-window-up";
-          "logo+l" = "focus-column-right";
-          
-          # Moving windows
-          "logo+shift+h" = "move-window-left";
-          "logo+shift+j" = "move-window-down";
-          "logo+shift+k" = "move-window-up";
-          "logo+shift+l" = "move-window-right";
-          
-          # System/session
-          "logo+shift+e" = "quit";
-          "logo+shift+r" = "reload-config";
-        };
-      };
-    };
-  };
+    // Set preferred terminal
+    terminal { command "kitty"; }
+
+    // XWayland configuration
+    xwayland {
+      enable true
+      use_satellite true
+    }
+
+    // Auto-start Noctilia shell
+    spawn_at_startup {
+      command "noctalia-shell"
+    }
+
+    // Focus configuration
+    focus {
+      follow_mouse true
+    }
+
+    // Key bindings
+    binds {
+      keyboard {
+        // Launcher
+        "logo+r" "exec rofi -show drun"
+        "logo+return" "exec kitty"
+
+        // Window management
+        "logo+q" "close"
+        "logo+f" "toggle_fullscreen"
+        "logo+e" "toggle_floating"
+
+        // Switch workspaces
+        "logo+1" "workspace 1"
+        "logo+2" "workspace 2"
+        "logo+3" "workspace 3"
+        "logo+4" "workspace 4"
+        "logo+5" "workspace 5"
+        "logo+6" "workspace 6"
+        "logo+7" "workspace 7"
+        "logo+8" "workspace 8"
+        "logo+9" "workspace 9"
+
+        // Move windows to workspaces
+        "logo+shift+1" "move_window_to_workspace 1"
+        "logo+shift+2" "move_window_to_workspace 2"
+        "logo+shift+3" "move_window_to_workspace 3"
+        "logo+shift+4" "move_window_to_workspace 4"
+        "logo+shift+5" "move_window_to_workspace 5"
+        "logo+shift+6" "move_window_to_workspace 6"
+        "logo+shift+7" "move_window_to_workspace 7"
+        "logo+shift+8" "move_window_to_workspace 8"
+        "logo+shift+9" "move_window_to_workspace 9"
+
+        // Navigation
+        "logo+h" "focus_column_left"
+        "logo+j" "focus_window_down"
+        "logo+k" "focus_window_up"
+        "logo+l" "focus_column_right"
+
+        // Moving windows
+        "logo+shift+h" "move_window_left"
+        "logo+shift+j" "move_window_down"
+        "logo+shift+k" "move_window_up"
+        "logo+shift+l" "move_window_right"
+
+        // System/session
+        "logo+shift+e" "quit"
+        "logo+shift+r" "reload_config"
+      }
+    }
+  '';
 
   # Additional programs to install
   home.packages = with pkgs; [
+    # Install Niri to the user's profile
+    inputs.niri-flake.packages.${system}.niri
     # System utilities
     htop
     btop

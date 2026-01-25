@@ -6,34 +6,28 @@
   programs.niri = {
     enable = true;
     package = inputs.niri-flake.packages.${pkgs.system}.niri;
-
-    # Additional system-wide settings for Niri can go here
-    settings = {
-      input = {
-        keyboard = {
-          xkb = {
-            layout = "za";
-          };
-        };
-        
-        # Touchpad settings if needed
-        touchpad = {
-          natural-scroll = true;
-          tap = true;
-        };
-      };
-      
-      # Ensure XWayland is enabled for compatibility with X11 apps
-      xwayland = {
-        enable = true;
-        # Enable XWayland Satellite for better X11 app integration
-        use-satellite = true;
-      };
-      
-      # Default outputs/display settings
-      outputs = {};
-    };
   };
+  
+  # Set up a basic Niri config file
+  environment.etc."niri/config.kdl".text = ''
+    input {
+      keyboard {
+        xkb {
+          layout "za"
+        }
+      }
+      
+      touchpad {
+        natural_scroll true
+        tap true
+      }
+    }
+    
+    xwayland {
+      enable true
+      use_satellite true
+    }
+  '';
 
   # Enable polkit for authentication dialogs
   security.polkit.enable = true;
