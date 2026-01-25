@@ -60,7 +60,7 @@
     udisks2.enable = true;
     
     # Desktop portals for app integration
-    xdg-desktop-portal = {
+    xdg.portal = {
       enable = true;
       wlr.enable = true;
       extraPortals = with pkgs; [
