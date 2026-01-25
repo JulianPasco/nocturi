@@ -163,7 +163,7 @@
   # Additional programs to install
   home.packages = with pkgs; [
     # Install Niri to the user's profile
-    inputs.niri-flake.packages.${pkgs.stdenv.hostPlatform.system}.niri
+    inputs.niri-flake.packages.${pkgs.stdenv.hostPlatform.system}.niri-unstable
     # System utilities
     htop
     btop

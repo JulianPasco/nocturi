@@ -5,7 +5,7 @@
   # Enable Niri from the flake
   programs.niri = {
     enable = true;
-    package = inputs.niri-flake.packages.${pkgs.stdenv.hostPlatform.system}.niri;
+    package = inputs.niri-flake.packages.${pkgs.stdenv.hostPlatform.system}.niri-unstable;
   };
   
   # Set up a basic Niri config file
@@ -35,7 +35,7 @@
   # Make sure we have all necessary dependencies for a functional Wayland session
   environment.systemPackages = with pkgs; [
     # XWayland Satellite package
-    inputs.xwayland-satellite-unstable.packages.${system}.default
+    inputs.xwayland-satellite-unstable.packages.${pkgs.stdenv.hostPlatform.system}.xwayland-satellite-unstable
     
     # Wayland essentials
     wayland
