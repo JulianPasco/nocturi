@@ -5,7 +5,7 @@
   # Enable Niri from the flake
   programs.niri = {
     enable = true;
-    package = inputs.niri-flake.packages.${pkgs.system}.niri;
+    package = inputs.niri-flake.packages.${pkgs.stdenv.hostPlatform.system}.niri;
   };
   
   # Set up a basic Niri config file
