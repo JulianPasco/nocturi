@@ -3,7 +3,7 @@
 
   inputs = {
     # NixOS unstable packages
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+    nixpkgs.url = "github:nixos/nixpkgs/c5296fdd05cfa2c187990dd909864da9658df755";
     
     # Home Manager for user configuration
     home-manager = {
@@ -19,12 +19,18 @@
     
     # Noctilia shell
     noctalia = {
-      url = "github:noctalia-dev/noctalia-shell";
+      url = "github:noctalia-dev/noctalia-shell/caf2302cea25c609c1ba7b6834f9e5aecff08a91";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    
+    # XWayland Satellite for better XWayland support
+    xwayland-satellite-unstable = {
+      url = "github:Supreeeme/xwayland-satellite/3af3e3ab78d0eb96fb9b5161693811e050b90991";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
 
-  outputs = inputs@{ self, nixpkgs, home-manager, niri-flake, noctalia, ... }:
+  outputs = inputs@{ self, nixpkgs, home-manager, niri-flake, noctalia, xwayland-satellite-unstable, ... }:
     let
       system = "x86_64-linux";
       pkgs = nixpkgs.legacyPackages.${system};
@@ -36,6 +42,7 @@
         modules = [
           ./hosts/${hostname}
           ./modules/system/niri.nix
+          inputs.xwayland-satellite-unstable.nixosModules.default
           home-manager.nixosModules.home-manager
           {
             home-manager = {

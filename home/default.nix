@@ -93,6 +93,12 @@
       # Set preferred terminal
       terminal.command = ["kitty"];
       
+      # XWayland configuration
+      xwayland = {
+        enable = true;
+        use-satellite = true;
+      };
+
       # Auto-start Noctilia shell
       spawn-at-startup = [
         {
@@ -222,5 +228,5 @@
   };
 
   # Home Manager state version
-  home.stateVersion = "23.11";
+  home.stateVersion = "25.11";
 }

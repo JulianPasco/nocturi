@@ -36,8 +36,8 @@
   };
 
   # Enable sddm as display manager for Wayland sessions
-  services.displayManager.sddm.enable = true;
-  services.displayManager.sddm.wayland.enable = true;
+  services.xserver.displayManager.sddm.enable = true;
+  services.xserver.displayManager.sddm.wayland.enable = true;
 
   # Enable Niri as Wayland compositor
   programs.niri.enable = true;
@@ -87,11 +87,11 @@
     colordiff
   ];
 
-  # Firefox with Wayland support
-  programs.firefox = {
-    enable = true;
-    nativeWaylandEnabled = true;
-  };
+  # Firefox
+  programs.firefox.enable = true;
+
+  # Enable Firefox Wayland support via environment variable
+  environment.sessionVariables.MOZ_ENABLE_WAYLAND = "1";
 
   # Enable experimental nix features
   nix.settings.experimental-features = [ "nix-command" "flakes" ];

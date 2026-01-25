@@ -24,7 +24,11 @@
       };
       
       # Ensure XWayland is enabled for compatibility with X11 apps
-      xwayland.enable = true;
+      xwayland = {
+        enable = true;
+        # Enable XWayland Satellite for better X11 app integration
+        use-satellite = true;
+      };
       
       # Default outputs/display settings
       outputs = {};
@@ -34,6 +38,9 @@
   # Enable polkit for authentication dialogs
   security.polkit.enable = true;
   
+  # Enable XWayland Satellite service
+  services.xwayland-satellite.enable = true;
+
   # Make sure we have all necessary dependencies for a functional Wayland session
   environment.systemPackages = with pkgs; [
     # Wayland essentials
