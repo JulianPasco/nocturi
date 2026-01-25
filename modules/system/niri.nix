@@ -38,11 +38,11 @@
   # Enable polkit for authentication dialogs
   security.polkit.enable = true;
   
-  # Enable XWayland Satellite service
-  services.xwayland-satellite.enable = true;
-
   # Make sure we have all necessary dependencies for a functional Wayland session
   environment.systemPackages = with pkgs; [
+    # XWayland Satellite package
+    inputs.xwayland-satellite-unstable.packages.${system}.default
+    
     # Wayland essentials
     wayland
     xdg-utils

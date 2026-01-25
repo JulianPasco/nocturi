@@ -42,7 +42,8 @@
         modules = [
           ./hosts/${hostname}
           ./modules/system/niri.nix
-          inputs.xwayland-satellite-unstable.nixosModules.default
+          # XWayland Satellite currently doesn't provide a NixOS module
+          # We configure it directly in the niri.nix module
           home-manager.nixosModules.home-manager
           {
             home-manager = {
