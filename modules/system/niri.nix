@@ -58,14 +58,14 @@
     
     # For auto-mounting removable media
     udisks2.enable = true;
-    
-    # Desktop portals for app integration
-    xdg.portal = {
-      enable = true;
-      wlr.enable = true;
-      extraPortals = with pkgs; [
-        xdg-desktop-portal-gtk
-      ];
-    };
+  };
+  
+  # Desktop portals for app integration
+  xdg.portal = {
+    enable = true;
+    wlr.enable = true;
+    extraPortals = with pkgs; [
+      xdg-desktop-portal-gtk
+    ];
   };
 }
