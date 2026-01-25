@@ -191,7 +191,7 @@
   # Configure terminal emulator (Kitty)
   programs.kitty = {
     enable = true;
-    theme = "Monokai Pro";
+    theme = "Monokai"; # Using standard Monokai theme instead of Monokai Pro
     settings = {
       font_family = "Hack";
       font_size = 11;
