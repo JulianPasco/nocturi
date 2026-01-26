@@ -22,25 +22,22 @@
       url = "github:noctalia-dev/noctalia-shell/caf2302cea25c609c1ba7b6834f9e5aecff08a91";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    
-    # XWayland Satellite for better XWayland support
-    xwayland-satellite-unstable = {
-      url = "github:Supreeeme/xwayland-satellite/3af3e3ab78d0eb96fb9b5161693811e050b90991";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
   };
 
-  outputs = inputs@{ self, nixpkgs, home-manager, niri-flake, noctalia, xwayland-satellite-unstable, ... }:
+  outputs = inputs@{ self, nixpkgs, home-manager, niri-flake, noctalia, ... }:
     let
       system = "x86_64-linux";
       pkgs = nixpkgs.legacyPackages.${system};
       
+      # Import user configuration
+      userConfig = import ./user-config.nix;
+      
       # Function to create NixOS configuration for each host
       mkHost = hostname: extraModules: nixpkgs.lib.nixosSystem {
         inherit system;
-        specialArgs = { inherit inputs hostname; };
+        specialArgs = { inherit inputs hostname userConfig; };
         modules = [
-          ./hosts/${hostname}
+          ./hosts/${hostname}/configuration.nix
           ./modules/system/niri.nix
           # XWayland Satellite currently doesn't provide a NixOS module
           # We configure it directly in the niri.nix module
@@ -49,8 +46,8 @@
             home-manager = {
               useGlobalPkgs = true;
               useUserPackages = true;
-              extraSpecialArgs = { inherit inputs hostname; };
-              users.julian = import ./home;
+              extraSpecialArgs = { inherit inputs hostname userConfig; };
+              users.${userConfig.username} = import ./home;
             };
           }
         ] ++ extraModules;

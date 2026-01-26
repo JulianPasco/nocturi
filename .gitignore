@@ -2,6 +2,9 @@
 result
 result-*
 
+# Hardware configurations (machine-specific, users generate their own)
+hardware-configuration.nix
+
 # Editor files
 .vscode/
 .idea/

@@ -8,44 +8,21 @@
     package = inputs.niri-flake.packages.${pkgs.stdenv.hostPlatform.system}.niri-unstable;
   };
   
-  # Set up a basic Niri config file
-  environment.etc."niri/config.kdl".text = ''
-    input {
-      keyboard {
-        xkb {
-          layout "za"
-        }
-      }
-      
-      touchpad {
-        natural_scroll true
-        tap true
-      }
-    }
-    
-    xwayland {
-      enable true
-      use_satellite true
-    }
-  '';
+  # User config is managed through home-manager
+  # No system-level config.kdl needed
 
   # Enable polkit for authentication dialogs
   security.polkit.enable = true;
   
   # Make sure we have all necessary dependencies for a functional Wayland session
   environment.systemPackages = with pkgs; [
-    # XWayland Satellite package
-    inputs.xwayland-satellite-unstable.packages.${pkgs.stdenv.hostPlatform.system}.xwayland-satellite-unstable
+    # XWayland Satellite package from niri-flake
+    inputs.niri-flake.packages.${pkgs.stdenv.hostPlatform.system}.xwayland-satellite-unstable
     
     # Wayland essentials
     wayland
     xdg-utils
     xwayland
-    
-    # Screen recording/sharing support
-    xdg-desktop-portal
-    xdg-desktop-portal-wlr
-    pipewire  # Needed for screen sharing
     
     # Authentication
     polkit_gnome
@@ -60,12 +37,19 @@
     udisks2.enable = true;
   };
   
-  # Desktop portals for app integration
+  # Desktop portals for app integration with deterministic backend order
   xdg.portal = {
     enable = true;
-    wlr.enable = true;
+
     extraPortals = with pkgs; [
+      xdg-desktop-portal-wlr
       xdg-desktop-portal-gtk
     ];
+
+    config = {
+      common = {
+        default = [ "wlr" "gtk" ];
+      };
+    };
   };
 }
