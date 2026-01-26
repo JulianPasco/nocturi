@@ -66,8 +66,8 @@ sudo nixos-rebuild switch
 
 # 2. Install git and clone
 nix-shell -p git
-git clone https://github.com/julianpasco/nixos-config.git ~/nixos-config
-cd ~/nixos-config
+git clone https://github.com/JulianPasco/nocturi.git ~/nocturi
+cd ~/nocturi
 ```
 
 ### Customize Your Settings

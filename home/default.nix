@@ -204,6 +204,7 @@
     # Development tools
     vscode
     windsurf
+    gh  # GitHub CLI
 
     # Browsers
     google-chrome
