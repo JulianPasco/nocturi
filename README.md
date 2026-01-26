@@ -200,6 +200,39 @@ nixosConfigurations = {
 ```
 7. Deploy: `sudo nixos-rebuild switch --flake .#newhost`
 
+## 🔄 Updating
+
+### Update Everything (Recommended)
+```bash
+cd ~/nocturi
+nix flake update              # Update all packages, Niri, Noctilia
+git diff flake.lock          # See what changed
+sudo nixos-rebuild switch --flake .#home  # or .#work
+# Test that everything works
+git add flake.lock
+git commit -m "Update: $(date +%Y-%m-%d)"
+git push
+```
+
+### Rebuild Without Updating
+```bash
+sudo nixos-rebuild switch --flake .#home
+```
+Uses current locked versions - no updates.
+
+### Selective Updates
+```bash
+nix flake update nixpkgs        # Only update system packages
+nix flake update noctalia       # Only update Noctilia Shell
+nix flake update niri-flake     # Only update Niri compositor
+```
+
+### Rollback if Needed
+```bash
+sudo nixos-rebuild switch --rollback
+# Or select previous generation from boot menu
+```
+
 ## 🔧 Features
 
 - ✅ TTY auto-login to Niri (no display manager overhead)
