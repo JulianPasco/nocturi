@@ -233,36 +233,51 @@ nixosConfigurations = {
 
 ## 🔄 Updating
 
-### Update Everything (Recommended)
+### Pull Latest Changes from GitHub
+
+When there are new updates to the config, run these commands:
+
 ```bash
 cd ~/nixos-config
-nix flake update              # Update all packages, Niri, Noctilia
-git diff flake.lock          # See what changed
-sudo nixos-rebuild switch --flake .#home  # or .#work
-# Test that everything works
-git add flake.lock
-git commit -m "Update: $(date +%Y-%m-%d)"
-git push
 ```
 
-### Rebuild Without Updating
 ```bash
-sudo nixos-rebuild switch --flake .#home
+git pull
 ```
-Uses current locked versions - no updates.
 
-### Selective Updates
 ```bash
-nix flake update nixpkgs        # Only update system packages
-nix flake update noctalia       # Only update Noctilia Shell
-nix flake update niri-flake     # Only update Niri compositor
+sudo nixos-rebuild switch --flake ~/nixos-config#work
 ```
 
-### Rollback if Needed
+> **Tip:** Replace `#work` with `#home` if you're on a laptop.
+
+---
+
+### Update System Packages
+
+This updates NixOS packages, Niri, and Noctilia to their latest versions:
+
+```bash
+cd ~/nixos-config
+```
+
+```bash
+nix flake update
+```
+
+```bash
+sudo nixos-rebuild switch --flake ~/nixos-config#work
+```
+
+---
+
+### Rollback if Something Breaks
+
 ```bash
 sudo nixos-rebuild switch --rollback
-# Or select previous generation from boot menu
 ```
+
+Or select a previous generation from the boot menu.
 
 ## 🔧 Features
 
