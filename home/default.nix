@@ -210,7 +210,7 @@
     google-chrome
     
     # File manager
-    nemo
+    nautilus
 
     # Wayland utilities
     
