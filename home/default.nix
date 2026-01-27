@@ -45,6 +45,8 @@
     layout {
         gaps 16
         center-focused-column "never"
+        always-center-single-column
+        empty-workspace-above-first
 
         preset-column-widths {
             proportion 0.33333
@@ -56,12 +58,20 @@
 
         focus-ring {
             width 4
-            active-color "#7fc8ff"
+            active-gradient from="#80c8ff" to="#bbddff" angle=45
             inactive-color "#505050"
         }
 
         border {
             off
+        }
+
+        shadow {
+            on
+            softness 30
+            spread 5
+            offset x=0 y=5
+            color "#00000070"
         }
     }
 
@@ -77,16 +87,57 @@
 
     screenshot-path "~/Pictures/Screenshots/Screenshot from %Y-%m-%d %H-%M-%S.png"
 
+    hotkey-overlay {
+        skip-at-startup
+    }
+
     animations {
-        // slowdown 1.0
+        slowdown 0.8
+    }
+
+    window-rule {
+        // Firefox Picture-in-Picture as floating
+        match app-id="firefox$" title="^Picture-in-Picture$"
+        open-floating true
+        default-column-width { fixed 480; }
+        default-window-height { fixed 270; }
+    }
+
+    window-rule {
+        // Bitwarden as floating centered window
+        match app-id="Bitwarden$"
+        open-floating true
+        default-column-width { fixed 800; }
+    }
+
+    window-rule {
+        // Telegram media viewer fullscreen by default
+        match app-id=r#"^org\.telegram\.desktop$"# title="^Media viewer$"
+        open-fullscreen true
+    }
+
+    window-rule {
+        // File pickers as floating
+        match title="^(Open|Save) .*"
+        open-floating true
     }
 
     binds {
+        // Hotkey help overlay
+        Mod+Shift+Slash { show-hotkey-overlay; }
+
         // Launch applications
         Mod+T { spawn "kitty"; }
+        Mod+Return { spawn "kitty"; }
+
         Mod+D { spawn "noctalia-shell" "ipc" "call" "launcher" "toggle"; }
         Mod+Space { spawn "noctalia-shell" "ipc" "call" "launcher" "toggle"; }
+        Mod+Period { spawn "noctalia-shell" "ipc" "call" "launcher" "emoji"; }
+        Mod+V { spawn "noctalia-shell" "ipc" "call" "launcher" "clipboard"; }
         Super+Escape { spawn "noctalia-shell" "ipc" "call" "lockScreen" "lock"; }
+
+        // Overview
+        Mod+O repeat=false { toggle-overview; }
 
         // Window management
         Mod+Q { close-window; }
@@ -126,6 +177,16 @@
         Mod+Shift+K     { focus-monitor-up; }
         Mod+Shift+L     { focus-monitor-right; }
 
+        // Move column to monitor
+        Mod+Shift+Ctrl+Left  { move-column-to-monitor-left; }
+        Mod+Shift+Ctrl+Down  { move-column-to-monitor-down; }
+        Mod+Shift+Ctrl+Up    { move-column-to-monitor-up; }
+        Mod+Shift+Ctrl+Right { move-column-to-monitor-right; }
+        Mod+Shift+Ctrl+H     { move-column-to-monitor-left; }
+        Mod+Shift+Ctrl+J     { move-column-to-monitor-down; }
+        Mod+Shift+Ctrl+K     { move-column-to-monitor-up; }
+        Mod+Shift+Ctrl+L     { move-column-to-monitor-right; }
+
         // Workspace navigation
         Mod+Page_Down { focus-workspace-down; }
         Mod+Page_Up   { focus-workspace-up; }
@@ -135,6 +196,10 @@
         Mod+Ctrl+Page_Up   { move-column-to-workspace-up; }
         Mod+Ctrl+U         { move-column-to-workspace-down; }
         Mod+Ctrl+I         { move-column-to-workspace-up; }
+
+        // Move entire workspace
+        Mod+Shift+Page_Down { move-workspace-down; }
+        Mod+Shift+Page_Up   { move-workspace-up; }
 
         // Workspace by number
         Mod+1 { focus-workspace 1; }
@@ -160,7 +225,6 @@
         Mod+BracketLeft  { consume-or-expel-window-left; }
         Mod+BracketRight { consume-or-expel-window-right; }
         Mod+Comma  { consume-window-into-column; }
-        Mod+Period { expel-window-from-column; }
 
         // Window sizing
         Mod+R { switch-preset-column-width; }
@@ -175,7 +239,7 @@
         Mod+Shift+Equal { set-window-height "+10%"; }
 
         // Floating windows
-        Mod+V { toggle-window-floating; }
+        Mod+Shift+Space { toggle-window-floating; }
         Mod+Shift+V { switch-focus-between-floating-and-tiling; }
 
         // Screenshots
@@ -183,6 +247,20 @@
         Print { screenshot; }
         Ctrl+Print { screenshot-screen; }
         Alt+Print { screenshot-window; }
+
+        // Media keys
+        XF86AudioRaiseVolume allow-when-locked=true { spawn-sh "wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.1+ -l 1.0"; }
+        XF86AudioLowerVolume allow-when-locked=true { spawn-sh "wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.1-"; }
+        XF86AudioMute        allow-when-locked=true { spawn-sh "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"; }
+        XF86AudioMicMute     allow-when-locked=true { spawn-sh "wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle"; }
+        XF86AudioPlay        allow-when-locked=true { spawn-sh "playerctl play-pause"; }
+        XF86AudioStop        allow-when-locked=true { spawn-sh "playerctl stop"; }
+        XF86AudioPrev        allow-when-locked=true { spawn-sh "playerctl previous"; }
+        XF86AudioNext        allow-when-locked=true { spawn-sh "playerctl next"; }
+
+        // Brightness keys
+        XF86MonBrightnessUp   allow-when-locked=true { spawn "brightnessctl" "--class=backlight" "set" "+10%"; }
+        XF86MonBrightnessDown allow-when-locked=true { spawn "brightnessctl" "--class=backlight" "set" "10%-"; }
 
         // System
         Mod+Shift+E { quit; }
