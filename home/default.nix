@@ -1,5 +1,5 @@
 # Home Manager configuration
-{ config, pkgs, inputs, hostname, userConfig, ... }:
+{ config, pkgs, pkgs-unstable, inputs, hostname, userConfig, ... }:
 
 {
   imports = [
@@ -203,7 +203,7 @@
     
     # Development tools
     vscode
-    windsurf
+    pkgs-unstable.windsurf  # Use unstable for latest version
     gh  # GitHub CLI
 
     # Browsers

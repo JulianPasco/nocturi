@@ -269,6 +269,11 @@ nix flake update
 sudo nixos-rebuild switch --flake ~/nixos-config#work
 ```
 
+> **Note:** If you get a "Permission denied" error on `flake.lock`, fix ownership with:
+> ```bash
+> sudo chown -R $USER:users ~/nixos-config
+> ```
+
 ---
 
 ### Rollback if Something Breaks
