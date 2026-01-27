@@ -56,68 +56,99 @@ See `home/default.nix` for complete list.
 
 ## 📦 Quick Start
 
-### Prerequisites (Fresh NixOS)
+> **Note:** These instructions are for a fresh NixOS installation. Just copy and paste each command!
+
+---
+
+### Step 1: Open the NixOS configuration file
 
 ```bash
-# 1. Enable flakes
 sudo nano /etc/nixos/configuration.nix
-# Add: nix.settings.experimental-features = [ "nix-command" "flakes" ];
-sudo nixos-rebuild switch
-
-# 2. Install git and clone
-nix-shell -p git
-git clone https://github.com/JulianPasco/nocturi.git ~/nocturi
-cd ~/nocturi
 ```
 
-### Customize Your Settings
+---
 
-**Before deploying, edit `user-config.nix` with your personal information:**
+### Step 2: Add git and enable flakes
+
+Find a spot in the file and add these two lines:
 
 ```nix
-{
-  username = "yourusername";        # Your username
-  fullName = "Your Name";           # Your full name
-  email = "you@example.com";        # Your email
-  
-  timezone = "America/New_York";    # Your timezone
-  locale = "en_US.UTF-8";           # Your locale
-  
-  wallpaperDir = "Pictures/Wallpapers";  # Wallpaper folder
-  
-  hostnames = {
-    home = "nixos-laptop";          # Laptop hostname
-    work = "nixos-desktop";         # Desktop hostname
-  };
-  
-  location = {                      # For weather widget
-    latitude = 40.7128;
-    longitude = -74.0060;
-    city = "New York";
-  };
-}
+environment.systemPackages = [ pkgs.git ];
+nix.settings.experimental-features = [ "nix-command" "flakes" ];
 ```
 
-### Deploy
+Then save the file: **Press `Ctrl+O`, then `Enter`, then `Ctrl+X`**
+
+---
+
+### Step 3: Apply the changes
 
 ```bash
-# 1. Generate hardware config
-sudo nixos-generate-config --show-hardware-config > /tmp/hardware-configuration.nix
+sudo nixos-rebuild switch
+```
 
-# 2. Copy to appropriate host directory
-cp /tmp/hardware-configuration.nix ~/nixos-config/hosts/home/  # for laptop
-# OR
-cp /tmp/hardware-configuration.nix ~/nixos-config/hosts/work/  # for desktop
+---
 
-# 3. Deploy
-cd ~/nixos-config
-sudo nixos-rebuild switch --flake .#home  # or .#work
+### Step 4: Clone the repository
 
-# 4. Reboot
+```bash
+git clone https://github.com/JulianPasco/nocturi.git ~/nixos-config
+```
+
+---
+
+### Step 5: Edit your personal settings
+
+```bash
+nano ~/nixos-config/user-config.nix
+```
+
+Update these values with your information:
+- `username` - Your Linux username
+- `fullName` - Your name
+- `email` - Your email
+- `timezone` - Your timezone (e.g., `"Europe/London"`, `"America/New_York"`)
+- `locale` - Your locale (e.g., `"en_US.UTF-8"`)
+
+Save: **Press `Ctrl+O`, then `Enter`, then `Ctrl+X`**
+
+---
+
+### Step 6: Copy your hardware configuration
+
+**For desktop/work machine:**
+```bash
+cp -a /etc/nixos/hardware-configuration.nix ~/nixos-config/hosts/work/
+```
+
+**For laptop/home machine:**
+```bash
+cp -a /etc/nixos/hardware-configuration.nix ~/nixos-config/hosts/home/
+```
+
+---
+
+### Step 7: Deploy!
+
+**For desktop/work:**
+```bash
+sudo nixos-rebuild switch --flake ~/nixos-config#work
+```
+
+**For laptop/home:**
+```bash
+sudo nixos-rebuild switch --flake ~/nixos-config#home
+```
+
+---
+
+### Step 8: Reboot
+
+```bash
 sudo reboot
 ```
 
-After login at TTY, Niri starts automatically.
+✅ **Done!** After reboot, log in at the terminal and Niri will start automatically.
 
 ## ⌨️ Keybindings
 
@@ -204,7 +235,7 @@ nixosConfigurations = {
 
 ### Update Everything (Recommended)
 ```bash
-cd ~/nocturi
+cd ~/nixos-config
 nix flake update              # Update all packages, Niri, Noctilia
 git diff flake.lock          # See what changed
 sudo nixos-rebuild switch --flake .#home  # or .#work
