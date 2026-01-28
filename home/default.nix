@@ -304,8 +304,10 @@
     # Browsers
     google-chrome
     
-    # File manager
-    nautilus
+    # File managers
+    xfce.thunar
+    xfce.thunar-volman  # Removable media support
+    xfce.thunar-archive-plugin  # Archive support
 
     # Wayland utilities
     
