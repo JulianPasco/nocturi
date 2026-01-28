@@ -44,7 +44,13 @@
   services.gnome.evolution-data-server.enable = true;
 
   # Enable printing support
-  services.printing.enable = true;
+  services.printing = {
+    enable = true;
+    drivers = with pkgs; [
+      splix
+      gutenprint
+    ];
+  };
 
   # Enable sound with pipewire
   services.pulseaudio.enable = false;
