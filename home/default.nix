@@ -24,6 +24,17 @@
     // Niri configuration
     // Based on default config: https://yalter.github.io/niri/Configuration:-Introduction
 
+    ${if hostname == "work" then ''
+    // Work dual-screen monitor layout
+    output "HDMI-A-3" {
+        position x=1920 y=0
+    }
+    
+    output "DP-1" {
+        position x=0 y=0
+    }
+    '' else ""}
+
     input {
         keyboard {
             xkb {
@@ -151,6 +162,12 @@
         Mod+J     { focus-window-down; }
         Mod+K     { focus-window-up; }
         Mod+L     { focus-column-right; }
+        
+        // Mouse scroll navigation
+        Mod+WheelScrollDown  { focus-column-right; }
+        Mod+WheelScrollUp    { focus-column-left; }
+        Mod+WheelScrollRight { focus-column-right; }
+        Mod+WheelScrollLeft  { focus-column-left; }
 
         // Move windows
         Mod+Ctrl+Left  { move-column-left; }
@@ -292,7 +309,7 @@
 
     # Wayland utilities
     
-    # Screenshot tools (from tutorial)
+    # Screenshot tools
     grim         # Screenshot utility for Wayland
     slurp        # Screen area selection for Wayland
     wl-clipboard # Wayland clipboard utilities
@@ -310,13 +327,25 @@
     # Media
     mpv
     pavucontrol
+    
+    # Graphics & Photo Printing
+    gimp
+
+    # Disk tools
+    gparted
+    gnome-disk-utility
+    gsmartcontrol
+    smartmontools
+    nvme-cli
+    impression
+
 
     # Network
     tailscale
     
     # Office & Productivity
     onlyoffice-desktopeditors
-    impression  # Modern presentation tool
+    
     
     # Cloud & Sync
     nextcloud-client
@@ -338,7 +367,7 @@
     filezilla
     github-desktop
     
-    # Fonts (from tutorial)
+    # Fonts
     nerd-fonts.jetbrains-mono  # JetBrains Mono Nerd Font
   ];
 

@@ -49,7 +49,15 @@
     drivers = with pkgs; [
       splix
       gutenprint
+      cnijfilter2  # Canon PIXMA drivers
     ];
+  };
+  
+  # Enable network printer discovery
+  services.avahi = {
+    enable = true;
+    nssmdns4 = true;
+    openFirewall = true;
   };
 
   # Enable sound with pipewire
@@ -83,6 +91,7 @@
     curl
     wget
     vim
+    usbutils
     
     # Wayland utilities
     wl-clipboard
