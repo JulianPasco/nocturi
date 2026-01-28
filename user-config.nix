@@ -5,7 +5,7 @@
   # User account settings
   username = "julian";
   fullName = "Julian";
-  email = "julian@example.com";  # Change to your email
+  email = "julian@hotstuff.co.za";  # Change to your email
   
   # System settings
   timezone = "Africa/Johannesburg";  # Change to your timezone (e.g., "America/New_York", "Europe/London")
