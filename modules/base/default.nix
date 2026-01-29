@@ -26,19 +26,26 @@
   # Enable Niri as Wayland compositor
   programs.niri.enable = true;
   
-  # XDG Portal configuration for Niri (file picker support)
-  xdg.portal = {
-    enable = true;
-    extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
-    config.niri = {
-      default = pkgs.lib.mkForce [ "gtk" ];
-      "org.freedesktop.impl.portal.FileChooser" = [ "gtk" ];
-    };
-  };
+  # XDG Portal configuration moved to modules/system/niri.nix to avoid conflicts
   
-  # Security and authentication services (recommended for Niri)
+  # Security and authentication services
   security.polkit.enable = true;
   services.gnome.gnome-keyring.enable = true;  # Secret service for passwords
+  
+  # Enable polkit authentication agent (graphical permission dialogs)
+  systemd.user.services.polkit-gnome-authentication-agent-1 = {
+    description = "polkit-gnome-authentication-agent-1";
+    wantedBy = [ "graphical-session.target" ];
+    wants = [ "graphical-session.target" ];
+    after = [ "graphical-session.target" ];
+    serviceConfig = {
+      Type = "simple";
+      ExecStart = "${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1";
+      Restart = "on-failure";
+      RestartSec = 1;
+      TimeoutStopSec = 10;
+    };
+  };
   
   # Calendar events support for Noctilia Shell
   services.gnome.evolution-data-server.enable = true;
@@ -74,7 +81,15 @@
   users.users.${userConfig.username} = {
     isNormalUser = true;
     description = userConfig.fullName;
-    extraGroups = [ "networkmanager" "wheel" ];
+    extraGroups = [ 
+      "networkmanager" 
+      "wheel" 
+      "video"        # Screen brightness, GPU access
+      "audio"        # Audio device access
+      "input"        # Input device access
+      "storage"      # Removable media access
+      "dialout"      # Serial port access
+    ];
     packages = with pkgs; [];
   };
 
@@ -111,6 +126,34 @@
   # Firefox with Wayland support
   programs.firefox.enable = true;
   environment.sessionVariables.MOZ_ENABLE_WAYLAND = "1";
+  
+  # Graphics and hardware acceleration
+  hardware.graphics = {
+    enable = true;
+    enable32Bit = true;  # For 32-bit apps and games
+  };
+  
+  # DBus services
+  services.dbus = {
+    enable = true;
+    packages = [ pkgs.dconf ];
+  };
+  
+  # Additional system services for desktop functionality
+  services.accounts-daemon.enable = true;  # User account information
+  programs.dconf.enable = true;             # Settings backend
+  
+  # Session variables for Wayland apps
+  environment.sessionVariables = {
+    # Wayland native support
+    NIXOS_OZONE_WL = "1";
+    # Qt Wayland support
+    QT_QPA_PLATFORM = "wayland;xcb";  # Prefer Wayland, fallback to X11
+    # SDL Wayland support
+    SDL_VIDEODRIVER = "wayland";
+    # Clutter backend
+    CLUTTER_BACKEND = "wayland";
+  };
 
   # Additional nix performance settings (base settings in nix-fast.nix)
   nix.settings = {

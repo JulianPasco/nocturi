@@ -37,19 +37,29 @@
     udisks2.enable = true;
   };
   
-  # Desktop portals for app integration with deterministic backend order
+  # Desktop portals for app integration (niri-specific configuration)
   xdg.portal = {
     enable = true;
-
+    
     extraPortals = with pkgs; [
-      xdg-desktop-portal-wlr
-      xdg-desktop-portal-gtk
+      xdg-desktop-portal-gtk   # GTK file picker and settings
+      xdg-desktop-portal-wlr   # Wayland screen sharing
     ];
-
+    
+    # Niri portal configuration - explicit backend selection
     config = {
+      niri = {
+        default = [ "gtk" ];
+        "org.freedesktop.impl.portal.Secret" = [ "gnome-keyring" ];
+        "org.freedesktop.impl.portal.ScreenCast" = [ "wlr" ];
+        "org.freedesktop.impl.portal.Screenshot" = [ "wlr" ];
+      };
       common = {
-        default = [ "wlr" "gtk" ];
+        default = [ "gtk" ];
       };
     };
+    
+    # Force xdg-desktop-portal to use our configuration
+    xdgOpenUsePortal = true;
   };
 }
