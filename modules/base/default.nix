@@ -112,35 +112,30 @@
   programs.firefox.enable = true;
   environment.sessionVariables.MOZ_ENABLE_WAYLAND = "1";
 
-  # Nix build performance optimizations
+  # Additional nix performance settings (base settings in nix-fast.nix)
   nix.settings = {
     # Parallel builds
     max-jobs = "auto";              # Use all available CPU cores
     cores = 0;                      # Let each job use all cores if needed
     
-    # Store optimization
-    auto-optimise-store = true;     # Dedupe files and reduce store bloat
-    keep-outputs = true;            # Keep build outputs for faster iteration
-    keep-derivations = true;        # Keep derivations for debugging
-    
     # Logging
     log-lines = 200;                # More context in build logs
-    warn-dirty = false;             # Don't warn about dirty git trees
     
-    # Binary caches (explicit for reliability)
+    # Additional binary cache for niri (beyond nix-fast.nix defaults)
     substituters = [
-      "https://cache.nixos.org"
-      "https://nix-community.cachix.org"
+      "https://niri.cachix.org"      # Niri binary cache for faster window manager builds
     ];
     
     trusted-public-keys = [
-      "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
-      "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
+      "niri.cachix.org-1:Wv0OmO7PsuocRKzfDoJ3mulSl7Z6oezYhGhR+3W2964="
     ];
     
-    # Enable flakes and new nix command
-    experimental-features = [ "nix-command" "flakes" ];
+    # Remote builder optimization
+    builders-use-substitutes = true;  # Let builders use binary caches
   };
+  
+  # Increase build users for better parallelization
+  nix.nrBuildUsers = 64;
   
   # Use zram instead of disk swap for better performance
   zramSwap = {
@@ -159,25 +154,16 @@
   
   # Use performance CPU governor for faster builds
   powerManagement.cpuFreqGovernor = "performance";
+  
+  # Use tmpfs for builds (builds in RAM for massive speed boost)
+  boot.tmp.useTmpfs = true;
+  boot.tmp.tmpfsSize = "50%";         # Use 50% of RAM for /tmp (adjust if needed)
 
   # tmpfs cache for faster desktop performance (3GB in-memory cache)
   fileSystems."/home/${userConfig.username}/.cache" = {
     device = "tmpfs";
     fsType = "tmpfs";
     options = [ "size=3G" "mode=700" "uid=1000" "gid=100" ];
-  };
-  
-  # Automatic garbage collection to keep store clean
-  nix.gc = {
-    automatic = true;
-    dates = "weekly";
-    options = "--delete-older-than 14d";
-  };
-  
-  # Automatic store optimization
-  nix.optimise = {
-    automatic = true;
-    dates = [ "weekly" ];
   };
 
   # This value determines the NixOS release

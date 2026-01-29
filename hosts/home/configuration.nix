@@ -6,6 +6,7 @@
   imports = [
     ./hardware-configuration.nix
     ../../modules/base
+    ../../modules/nix-fast.nix
   ];
 
   # Hostname
