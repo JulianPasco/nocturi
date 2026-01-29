@@ -71,7 +71,7 @@
 
         focus-ring {
             width 2
-            active-gradient from="#80c8ff" to="#bbddff" angle=45 relative-to="workspace-view"
+            active-gradient from="#FF8F40" to="#FFCC66" angle=45 relative-to="workspace-view"
             inactive-gradient from="#40404080" to="#50505080" angle=45 relative-to="workspace-view"
         }
 
