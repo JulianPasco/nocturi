@@ -67,10 +67,12 @@
 
         default-column-width { proportion 0.5; }
 
+        corner-radius 8
+
         focus-ring {
-            width 4
-            active-gradient from="#80c8ff" to="#bbddff" angle=45
-            inactive-color "#505050"
+            width 2
+            active-gradient from="#80c8ff" to="#bbddff" angle=45 relative-to="workspace-view"
+            inactive-gradient from="#40404080" to="#50505080" angle=45 relative-to="workspace-view"
         }
 
         border {
@@ -427,6 +429,30 @@
       font_size = 11;
       enable_audio_bell = false;
       background_opacity = "0.95";
+    };
+  };
+
+  # Configure Alacritty
+  programs.alacritty = {
+    enable = true;
+    settings = {
+      font = {
+        normal = {
+          family = "Hack";
+        };
+        size = 11;
+      };
+      window = {
+        opacity = 0.95;
+        padding = {
+          x = 6;
+          y = 6;
+        };
+      };
+      bell = {
+        animation = "EaseOutExpo";
+        duration = 0;
+      };
     };
   };
 
