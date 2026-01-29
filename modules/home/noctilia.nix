@@ -224,7 +224,7 @@
       dock = {
         enabled = true;
         position = "bottom";
-        displayMode = "always_visible";
+        displayMode = "auto_hide";
         backgroundOpacity = 0.61;
         floatingRatio = 0.22;
         size = 1.18;
