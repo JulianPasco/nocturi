@@ -158,9 +158,9 @@
         enabled = true;
         directory = "/home/${userConfig.username}/${userConfig.wallpaperDir}";
         fillMode = "crop";
-        automationEnabled = false;  # Disabled to keep static wallpaper
+        automationEnabled = true;
         wallpaperChangeMode = "random";
-        randomIntervalSec = 300;
+        randomIntervalSec = 1800;
         transitionDuration = 1500;
         transitionType = "random";
       };
