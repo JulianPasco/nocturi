@@ -1,5 +1,5 @@
 # Niri window manager configuration
-{ config, pkgs, inputs, ... }:
+{ config, lib, pkgs, inputs, ... }:
 
 {
   # Enable Niri from the flake
@@ -49,7 +49,7 @@
     # Niri portal configuration - explicit backend selection
     config = {
       niri = {
-        default = [ "gtk" ];
+        default = lib.mkForce [ "gtk" ];
         "org.freedesktop.impl.portal.Secret" = [ "gnome-keyring" ];
         "org.freedesktop.impl.portal.ScreenCast" = [ "wlr" ];
         "org.freedesktop.impl.portal.Screenshot" = [ "wlr" ];
