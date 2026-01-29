@@ -67,8 +67,6 @@
 
         default-column-width { proportion 0.5; }
 
-        corner-radius 8
-
         focus-ring {
             width 2
             active-gradient from="#FF8F40" to="#FFCC66" angle=45 relative-to="workspace-view"
