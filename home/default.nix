@@ -57,7 +57,6 @@
         gaps 16
         center-focused-column "never"
         always-center-single-column
-        empty-workspace-above-first
 
         preset-column-widths {
             proportion 0.33333

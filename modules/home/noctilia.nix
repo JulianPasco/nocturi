@@ -11,8 +11,8 @@
       # Bar configuration
       bar = {
         position = "top";
-        showCapsule = true;
-        backgroundOpacity = 0.93;
+        showCapsule = false;
+        backgroundOpacity = 0.75;
         marginVertical = 4;
         marginHorizontal = 4;
         outerCorners = true;
@@ -119,13 +119,16 @@
       ui = {
         fontDefault = "JetBrainsMono Nerd Font Propo";
         panelBackgroundOpacity = 0.93;
-        boxBorderEnabled = true;
+        boxBorderEnabled = false;
       };
       
       # General settings
       general = {
         avatarImage = "/home/${userConfig.username}/${userConfig.avatarImage}";
-        radiusRatio = 0.2;
+        radiusRatio = 1;
+        iRadiusRatio = 1;
+        boxRadiusRatio = 1;
+        screenRadiusRatio = 1;
         lockOnSuspend = true;
         enableShadows = true;
       };
@@ -221,10 +224,11 @@
       dock = {
         enabled = true;
         position = "bottom";
-        displayMode = "auto_hide";
-        backgroundOpacity = 1;
-        floatingRatio = 1;
-        size = 1;
+        displayMode = "always_visible";
+        backgroundOpacity = 0.61;
+        floatingRatio = 0.22;
+        size = 1.18;
+        colorizeIcons = true;
       };
       
       # Session Menu
@@ -254,11 +258,15 @@
       # Templates (enable theming for installed apps)
       templates = {
         activeTemplates = [
-          { enabled = true; id = "kitty"; }
           { enabled = true; id = "alacritty"; }
           { enabled = true; id = "btop"; }
           { enabled = true; id = "fuzzel"; }
           { enabled = true; id = "niri"; }
+          { enabled = true; id = "kitty"; }
+          { enabled = true; id = "gtk"; }
+          { enabled = true; id = "telegram"; }
+          { enabled = true; id = "yazi"; }
+          { enabled = true; id = "kcolorscheme"; }
         ];
       };
       
