@@ -300,6 +300,7 @@
     vscode
     pkgs-unstable.windsurf  # Use unstable for latest version
     gh  # GitHub CLI
+    gedit  #text editor
 
     # Browsers
     google-chrome
@@ -324,6 +325,15 @@
     xdg-desktop-portal-gtk  # Portal support for screen recorder
     evolution-data-server  # Calendar events support
     
+    # GTK theming for Noctilia Shell
+    adw-gtk3-theme    # Libadwaita theme for GTK3 apps
+    nwg-look          # GTK theme switcher and manager
+    
+    # Qt theming support
+    qt6ct             # Qt6 configuration tool
+    qt5ct             # Qt5 configuration tool
+    libsForQt5.qtstyleplugin-kvantum  # Kvantum Qt theme engine
+    
     # Media
     mpv
     pavucontrol
@@ -336,8 +346,7 @@
     gnome-disk-utility
     gsmartcontrol
     smartmontools
-    nvme-cli
-    impression
+    popsicle
 
 
     # Network
@@ -377,6 +386,26 @@
     NIXOS_OZONE_WL = "1";
     # Electron apps can use Wayland or fall back to XWayland
     ELECTRON_OZONE_PLATFORM_HINT = "auto";
+    # Qt theming
+    QT_QPA_PLATFORMTHEME = "qt6ct";
+  };
+  
+  # GTK theming configuration for Noctilia Shell
+  gtk = {
+    enable = true;
+    
+    theme = {
+      name = "adw-gtk3-dark";
+      package = pkgs.adw-gtk3-theme;
+    };
+    
+    gtk3.extraConfig = {
+      gtk-application-prefer-dark-theme = true;
+    };
+    
+    gtk4.extraConfig = {
+      gtk-application-prefer-dark-theme = true;
+    };
   };
 
   # Configure Git
