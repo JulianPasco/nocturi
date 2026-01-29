@@ -330,8 +330,8 @@
     nwg-look          # GTK theme switcher and manager
     
     # Qt theming support
-    qt6ct             # Qt6 configuration tool
-    qt5ct             # Qt5 configuration tool
+    qt6Packages.qt6ct           # Qt6 configuration tool
+    libsForQt5.qt5ct            # Qt5 configuration tool
     libsForQt5.qtstyleplugin-kvantum  # Kvantum Qt theme engine
     
     # Media
