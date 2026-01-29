@@ -326,7 +326,7 @@
     evolution-data-server  # Calendar events support
     
     # GTK theming for Noctilia Shell
-    adw-gtk3-theme    # Libadwaita theme for GTK3 apps
+    adw-gtk3          # Libadwaita theme for GTK3 apps
     nwg-look          # GTK theme switcher and manager
     
     # Qt theming support
@@ -396,7 +396,7 @@
     
     theme = {
       name = "adw-gtk3-dark";
-      package = pkgs.adw-gtk3-theme;
+      package = pkgs.adw-gtk3;
     };
     
     gtk3.extraConfig = {
