@@ -7,6 +7,35 @@
     enable = true;
     systemd.enable = true;
     
+    plugins = {
+      sources = [
+        {
+          enabled = true;
+          name = "Official Noctalia Plugins";
+          url = "https://github.com/noctalia-dev/noctalia-plugins";
+        }
+      ];
+      states = {
+        catwalk = {
+          enabled = true;
+          sourceUrl = "https://github.com/noctalia-dev/noctalia-plugins";
+        };
+        tailscale = {
+          enabled = true;
+          sourceUrl = "https://github.com/noctalia-dev/noctalia-plugins";
+        };
+        clipper = {
+          enabled = true;
+          sourceUrl = "https://github.com/noctalia-dev/noctalia-plugins";
+        };
+        screenshot = {
+          enabled = true;
+          sourceUrl = "https://github.com/noctalia-dev/noctalia-plugins";
+        };
+      };
+      version = 1;
+    };
+    
     settings = {
       # Bar configuration
       bar = {
@@ -81,7 +110,7 @@
             }
             {
               id = "Brightness";
-              displayMode = "alwaysShow";
+              displayMode = "onhover";
             }
             {
               id = "Battery";

@@ -51,6 +51,8 @@
         mouse {
             // Default settings
         }
+        
+        focus-follows-mouse
     }
 
     layout {
@@ -104,6 +106,12 @@
 
     animations {
         slowdown 0.8
+    }
+
+    window-rule {
+        // Rounded corners for a modern look
+        geometry-corner-radius 15
+        clip-to-geometry true
     }
 
     window-rule {
@@ -284,6 +292,11 @@
         Mod+Shift+P { power-off-monitors; }
         Mod+Escape allow-inhibiting=false { toggle-keyboard-shortcuts-inhibit; }
     }
+
+    debug {
+        // Allows notification actions and window activation from Noctalia
+        honor-xdg-activation-with-invalid-serial
+    }
   '';
 
   # Additional programs to install
@@ -354,7 +367,7 @@
     
     # Office & Productivity
     onlyoffice-desktopeditors
-    
+    evince  # PDF viewer
     
     # Cloud & Sync
     nextcloud-client
@@ -427,30 +440,6 @@
       font_size = 11;
       enable_audio_bell = false;
       background_opacity = "0.95";
-    };
-  };
-
-  # Configure Alacritty
-  programs.alacritty = {
-    enable = true;
-    settings = {
-      font = {
-        normal = {
-          family = "Hack";
-        };
-        size = 11;
-      };
-      window = {
-        opacity = 0.95;
-        padding = {
-          x = 6;
-          y = 6;
-        };
-      };
-      bell = {
-        animation = "EaseOutExpo";
-        duration = 0;
-      };
     };
   };
 
