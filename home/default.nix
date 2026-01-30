@@ -16,7 +16,15 @@
   # Let Home Manager install and manage itself
   programs.home-manager.enable = true;
 
-  # Noctilia Shell configuration is imported from ../modules/home/noctilia.nix
+  # Set default wallpaper for Noctalia Shell
+  home.file.".cache/noctalia/wallpapers.json" = {
+    text = builtins.toJSON {
+      defaultWallpaper = "/home/${userConfig.username}/Pictures/Wallpaper-Bank/wallpapers/Balcony-ja.png";
+      wallpapers = {};
+    };
+  };
+
+  # Noctalia Shell configuration is imported from ../modules/home/noctilia.nix
   # This allows settings to be shared between home and work machines
 
   # Configure Niri through home-manager
@@ -59,6 +67,7 @@
         gaps 16
         center-focused-column "never"
         always-center-single-column
+        background-color "transparent"
 
         preset-column-widths {
             proportion 0.33333
@@ -112,6 +121,12 @@
     layer-rule {
         match namespace="^noctalia-wallpaper*"
         place-within-backdrop true
+    }
+
+    overview {
+        workspace-shadow {
+            off
+        }
     }
 
     window-rule {

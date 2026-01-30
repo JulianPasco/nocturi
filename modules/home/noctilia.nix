@@ -188,11 +188,11 @@
         overviewEnabled = false;
         directory = "/home/${userConfig.username}/${userConfig.wallpaperDir}";
         fillMode = "crop";
-        automationEnabled = true;
-        wallpaperChangeMode = "random";
-        randomIntervalSec = 1800;
-        transitionDuration = 1500;
-        transitionType = "random";
+        automationEnabled = false;
+        wallpaperChangeMode = "manual";
+        randomIntervalSec = 3600;
+        transitionDuration = 500;
+        transitionType = "fade";
       };
       
       # App Launcher
