@@ -458,7 +458,7 @@
     enable = true;
     shellAliases = {
       ll = "ls -la";
-      update = "sudo nixos-rebuild switch --fast --option binary-caches-parallel-connections 40 --flake /home/julian/nixos-config#${hostname}";
+      update = "sudo nixos-rebuild switch --no-reexec --option binary-caches-parallel-connections 40 --flake /home/julian/nixos-config#${hostname}";
       startniri = "niri-session";  # Quick alias to start Niri
     };
     # Auto-start Niri on TTY1 with guard variable to prevent infinite loop
