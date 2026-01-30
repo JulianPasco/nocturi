@@ -185,6 +185,7 @@
       # Wallpaper settings
       wallpaper = {
         enabled = true;
+        overviewEnabled = false;
         directory = "/home/${userConfig.username}/${userConfig.wallpaperDir}";
         fillMode = "crop";
         automationEnabled = true;

@@ -108,6 +108,12 @@
         slowdown 0.8
     }
 
+    // Set the regular wallpaper on the backdrop
+    layer-rule {
+        match namespace="^noctalia-wallpaper*"
+        place-within-backdrop true
+    }
+
     window-rule {
         // Rounded corners for a modern look
         geometry-corner-radius 15
