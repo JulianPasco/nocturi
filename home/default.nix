@@ -324,8 +324,12 @@
     # Browsers
     google-chrome
     
-    # File manager
+    # File manager & GNOME utilities
     nautilus
+    file-roller        # Archive manager
+    baobab             # Disk usage analyzer
+    gnome-calculator   # Calculator
+    simple-scan        # Document scanner
 
     # Wayland utilities
     
