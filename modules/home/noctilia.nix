@@ -160,6 +160,8 @@
         screenRadiusRatio = 1;
         lockOnSuspend = true;
         enableShadows = true;
+        showChangelogOnStartup = false;  # Disable changelog/privacy popup
+        telemetryEnabled = false;         # Disable telemetry
       };
       
       # Location settings

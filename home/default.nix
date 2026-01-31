@@ -136,6 +136,18 @@
     }
 
     window-rule {
+        // Windsurf maximized by default
+        match app-id=r#"[Ww]indsurf"#
+        open-maximized true
+    }
+
+    window-rule {
+        // Google Chrome maximized by default  
+        match app-id=r#"[Gg]oogle-chrome"#
+        open-maximized true
+    }
+
+    window-rule {
         // Firefox Picture-in-Picture as floating
         match app-id="firefox$" title="^Picture-in-Picture$"
         open-floating true
