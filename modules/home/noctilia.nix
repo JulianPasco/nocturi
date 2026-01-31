@@ -300,10 +300,11 @@
         ];
       };
       
-      # Hooks - enable keep awake and set power profile to powersaver on startup
+      # Hooks - disabled to allow proper power management
+      # The idle inhibitor was preventing system sleep/suspend
       hooks = {
-        enabled = true;
-        startup = "noctalia-shell ipc call idleInhibitor enable && noctalia-shell ipc call powerProfile set powersaver";
+        enabled = false;
+        startup = "";
       };
     };
   };

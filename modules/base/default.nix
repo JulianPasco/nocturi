@@ -183,7 +183,7 @@
   # Use zram instead of disk swap for better performance
   zramSwap = {
     enable = true;
-    memoryPercent = 50;             # Use 50% of RAM for compressed swap
+    memoryPercent = 30;             # Use 30% of RAM for compressed swap (reduced from 50%)
     algorithm = "zstd";             # Fast compression
   };
   
@@ -195,18 +195,20 @@
     "vm.dirty_ratio" = 15;               # Force synchronous writes at 15% dirty pages
   };
   
-  # Use performance CPU governor for faster builds
-  powerManagement.cpuFreqGovernor = "performance";
+  # Use ondemand CPU governor for balanced performance and power efficiency
+  # This scales CPU frequency based on load instead of running at max 24/7
+  powerManagement.cpuFreqGovernor = "ondemand";
   
   # Use tmpfs for builds (builds in RAM for massive speed boost)
   boot.tmp.useTmpfs = true;
-  boot.tmp.tmpfsSize = "50%";         # Use 50% of RAM for /tmp (adjust if needed)
+  boot.tmp.tmpfsSize = "25%";         # Use 25% of RAM for /tmp (reduced from 50%)
 
-  # tmpfs cache for faster desktop performance (3GB in-memory cache)
+  # tmpfs cache for faster desktop performance (1.5GB in-memory cache)
+  # Reduced from 3GB to prevent RAM exhaustion
   fileSystems."/home/${userConfig.username}/.cache" = {
     device = "tmpfs";
     fsType = "tmpfs";
-    options = [ "size=3G" "mode=700" "uid=1000" "gid=100" ];
+    options = [ "size=1536M" "mode=700" "uid=1000" "gid=100" ];
   };
 
   # This value determines the NixOS release
