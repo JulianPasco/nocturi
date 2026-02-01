@@ -53,6 +53,7 @@
             home-manager = {
               useGlobalPkgs = true;
               useUserPackages = true;
+              backupFileExtension = "backup";  # Backup existing files that would be overwritten
               extraSpecialArgs = { inherit inputs hostname userConfig pkgs-unstable; };
               users.${userConfig.username} = import ./home;
             };

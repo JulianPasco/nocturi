@@ -457,6 +457,10 @@
       gtk-application-prefer-dark-theme = true;
     };
   };
+  
+  # Force overwrite existing GTK config files
+  xdg.configFile."gtk-4.0/gtk.css".force = true;
+  xdg.configFile."gtk-4.0/settings.ini".force = true;
 
   # Configure Git
   programs.git = {
