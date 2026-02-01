@@ -185,10 +185,11 @@
       };
       
       # Wallpaper settings
+      # Disabled directory scanning to avoid processing 161+ images on startup
       wallpaper = {
         enabled = true;
         overviewEnabled = false;
-        directory = "/home/${userConfig.username}/${userConfig.wallpaperDir}";
+        directory = "";  # Disabled to prevent scanning 161 wallpapers
         fillMode = "crop";
         automationEnabled = false;
         wallpaperChangeMode = "manual";
@@ -288,17 +289,18 @@
       };
       
       # Templates (enable theming for installed apps)
+      # Reduced to essential templates only to minimize startup resource usage
       templates = {
         activeTemplates = [
-          { enabled = true; id = "alacritty"; }
-          { enabled = true; id = "btop"; }
-          { enabled = true; id = "fuzzel"; }
-          { enabled = true; id = "niri"; }
-          { enabled = true; id = "kitty"; }
-          { enabled = true; id = "gtk"; }
-          { enabled = true; id = "telegram"; }
-          { enabled = true; id = "yazi"; }
-          { enabled = true; id = "kcolorscheme"; }
+          { enabled = false; id = "alacritty"; }
+          { enabled = false; id = "btop"; }
+          { enabled = false; id = "fuzzel"; }
+          { enabled = false; id = "niri"; }
+          { enabled = true; id = "kitty"; }  # Keep terminal theme
+          { enabled = true; id = "gtk"; }    # Keep GTK theme
+          { enabled = false; id = "telegram"; }
+          { enabled = false; id = "yazi"; }
+          { enabled = false; id = "kcolorscheme"; }
         ];
       };
       
