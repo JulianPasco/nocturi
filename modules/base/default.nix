@@ -33,9 +33,6 @@ in {
   # Configure console keymap for TTY login
   console.keyMap = "us";
 
-  # Enable Niri as Wayland compositor
-  programs.niri.enable = true;
-  
   # XDG Portal configuration moved to modules/system/niri.nix to avoid conflicts
   
   # Security and authentication services

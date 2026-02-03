@@ -337,7 +337,6 @@
     # System utilities
     htop
     btop
-    neofetch
     
     # Development tools
     vscode
@@ -360,7 +359,6 @@
     # Screenshot tools
     grim         # Screenshot utility for Wayland
     slurp        # Screen area selection for Wayland
-    wl-clipboard # Wayland clipboard utilities
     
     # Noctilia Shell dependencies
     brightnessctl     # Required: Brightness control
@@ -369,7 +367,7 @@
     cliphist          # Optional: Clipboard history support
     cava              # Optional: Audio visualizer
     wlsunset          # Optional: Night light functionality
-    evolution-data-server  # Calendar events support
+    playerctl         # Media key support
     
     # GTK theming for Noctilia Shell
     adw-gtk3          # Libadwaita theme for GTK3 apps
@@ -473,7 +471,7 @@
   programs.kitty = {
     enable = true;
     settings = {
-      font_family = "Hack";
+      font_family = "JetBrainsMono Nerd Font";
       font_size = 11;
       enable_audio_bell = false;
       background_opacity = "0.95";
