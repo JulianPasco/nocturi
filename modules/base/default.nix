@@ -1,8 +1,18 @@
 # Shared base configuration for all hosts
 # Contains all common settings between home and work PCs
-{ config, pkgs, inputs, hostname, userConfig, ... }:
+{ config, lib, pkgs, inputs, hostname, userConfig, ... }:
 
-{
+let
+  userName = userConfig.username;
+  user = config.users.users.${userName};
+  userUid = if user.uid == null then 1000 else user.uid;
+  userGroupName = if user.group == null then "users" else user.group;
+  userGroup = config.users.groups.${userGroupName} or null;
+  userGid =
+    if userGroup == null || userGroup.gid == null
+    then 100
+    else userGroup.gid;
+in {
   # Bootloader configuration (common for all UEFI systems)
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
@@ -205,10 +215,6 @@
     "vm.dirty_ratio" = 15;               # Force synchronous writes at 15% dirty pages
   };
   
-  # Use ondemand CPU governor for balanced performance and power efficiency
-  # This scales CPU frequency based on load instead of running at max 24/7
-  powerManagement.cpuFreqGovernor = "ondemand";
-  
   # Use tmpfs for builds (builds in RAM for massive speed boost)
   boot.tmp.useTmpfs = true;
   boot.tmp.tmpfsSize = "25%";         # Use 25% of RAM for /tmp (reduced from 50%)
@@ -218,7 +224,12 @@
   fileSystems."/home/${userConfig.username}/.cache" = {
     device = "tmpfs";
     fsType = "tmpfs";
-    options = [ "size=1536M" "mode=700" "uid=1000" "gid=100" ];
+    options = [
+      "size=1536M"
+      "mode=700"
+      "uid=${toString userUid}"
+      "gid=${toString userGid}"
+    ];
   };
 
   # This value determines the NixOS release

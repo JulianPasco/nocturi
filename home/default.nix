@@ -334,9 +334,6 @@
 
   # Additional programs to install
   home.packages = with pkgs; [
-    # Install Niri to the user's profile
-    inputs.niri-flake.packages.${pkgs.stdenv.hostPlatform.system}.niri-unstable
-    
     # System utilities
     htop
     btop
@@ -372,7 +369,6 @@
     cliphist          # Optional: Clipboard history support
     cava              # Optional: Audio visualizer
     wlsunset          # Optional: Night light functionality
-    xdg-desktop-portal-gtk  # Portal support for screen recorder
     evolution-data-server  # Calendar events support
     
     # GTK theming for Noctilia Shell
