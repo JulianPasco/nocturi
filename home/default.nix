@@ -19,7 +19,7 @@
   # Set default wallpaper for Noctalia Shell
   home.file.".cache/noctalia/wallpapers.json" = {
     text = builtins.toJSON {
-      defaultWallpaper = "/home/${userConfig.username}/Pictures/Wallpaper-Bank/wallpapers/Balcony-ja.png";
+      defaultWallpaper = "/home/${userConfig.username}/${userConfig.wallpaperDir}/Balcony-ja.png";
       wallpapers = {};
     };
   };
@@ -323,7 +323,7 @@
         // System
         Mod+Shift+E { quit; }
         Mod+Shift+P { power-off-monitors; }
-        Mod+Escape allow-inhibiting=false { toggle-keyboard-shortcuts-inhibit; }
+        Mod+Ctrl+Escape allow-inhibiting=false { toggle-keyboard-shortcuts-inhibit; }
     }
 
     debug {
@@ -394,7 +394,6 @@
 
 
     # Network
-    tailscale
     
     # Office & Productivity
     onlyoffice-desktopeditors

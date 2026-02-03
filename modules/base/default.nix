@@ -117,7 +117,6 @@ in {
   environment.systemPackages = with pkgs; [
     # CLI utilities
     git
-    kitty
     alacritty
     fastfetch
     curl
@@ -162,8 +161,6 @@ in {
   
   # Session variables for Wayland apps
   environment.sessionVariables = {
-    # Wayland native support
-    NIXOS_OZONE_WL = "1";
     # Qt Wayland support
     QT_QPA_PLATFORM = "wayland;xcb";  # Prefer Wayland, fallback to X11
     # SDL Wayland support
@@ -224,6 +221,8 @@ in {
     options = [
       "size=1536M"
       "mode=700"
+      "nofail"
+      "x-systemd.automount"
       "uid=${toString userUid}"
       "gid=${toString userGid}"
     ];
