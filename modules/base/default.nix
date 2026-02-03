@@ -141,7 +141,6 @@ in {
 
   # Firefox with Wayland support
   programs.firefox.enable = true;
-  environment.sessionVariables.MOZ_ENABLE_WAYLAND = "1";
   
   # Graphics and hardware acceleration
   hardware.graphics = {
@@ -159,16 +158,6 @@ in {
   services.accounts-daemon.enable = true;  # User account information
   programs.dconf.enable = true;             # Settings backend
   
-  # Session variables for Wayland apps
-  environment.sessionVariables = {
-    # Qt Wayland support
-    QT_QPA_PLATFORM = "wayland;xcb";  # Prefer Wayland, fallback to X11
-    # SDL Wayland support
-    SDL_VIDEODRIVER = "wayland";
-    # Clutter backend
-    CLUTTER_BACKEND = "wayland";
-  };
-
   # Additional nix performance settings (base settings in nix-fast.nix)
   nix.settings = {
     # Parallel builds

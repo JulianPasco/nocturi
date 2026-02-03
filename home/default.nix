@@ -101,8 +101,8 @@
     spawn-at-startup "xwayland-satellite" ":0"
 
     environment {
+        // Needed for XWayland apps with xwayland-satellite
         DISPLAY ":0"
-        ELECTRON_OZONE_PLATFORM_HINT "auto"
     }
 
     prefer-no-csd
@@ -425,10 +425,14 @@
 
   # Session variables for Wayland and Electron apps
   home.sessionVariables = {
-    # Enable Wayland for compatible apps
+    # Wayland / XWayland behavior
     NIXOS_OZONE_WL = "1";
-    # Electron apps can use Wayland or fall back to XWayland
     ELECTRON_OZONE_PLATFORM_HINT = "auto";
+    MOZ_ENABLE_WAYLAND = "1";
+    QT_QPA_PLATFORM = "wayland;xcb";
+    SDL_VIDEODRIVER = "wayland";
+    CLUTTER_BACKEND = "wayland";
+    
     # Qt theming
     QT_QPA_PLATFORMTHEME = "qt6ct";
   };
@@ -482,10 +486,48 @@
     enable = true;
     shellAliases = {
       ll = "ls -la";
-      update = "sudo nixos-rebuild switch --no-reexec --option binary-caches-parallel-connections 40 --flake /home/julian/nixos-config#${hostname}";
-      upgrade = "cd /home/julian/nixos-config && nix flake update && sudo nixos-rebuild switch --no-reexec --option binary-caches-parallel-connections 40 --flake /home/julian/nixos-config#${hostname}";
+      update = "nixos-update";
+      upgrade = "nixos-upgrade";
       startniri = "niri-session";  # Quick alias to start Niri
     };
+    bashrcExtra = ''
+      # NixOS helpers (work across devices)
+      _nixos_config_dir() {
+        if [ -n "$NIXOS_CONFIG_DIR" ]; then
+          printf "%s" "$NIXOS_CONFIG_DIR"
+        else
+          printf "%s" "${config.home.homeDirectory}/nixos-config"
+        fi
+      }
+
+      nixos-update() {
+        local dir
+        dir="$(_nixos_config_dir)"
+        if [ ! -f "$dir/flake.nix" ]; then
+          echo "NixOS config not found at: $dir" >&2
+          echo "Set NIXOS_CONFIG_DIR or clone the repo to that path." >&2
+          return 1
+        fi
+        sudo nixos-rebuild switch --no-reexec --option binary-caches-parallel-connections 40 --flake "$dir#${hostname}"
+      }
+
+      nixos-upgrade() {
+        local dir
+        dir="$(_nixos_config_dir)"
+        if [ ! -f "$dir/flake.nix" ]; then
+          echo "NixOS config not found at: $dir" >&2
+          echo "Set NIXOS_CONFIG_DIR or clone the repo to that path." >&2
+          return 1
+        fi
+        if [ -f "$dir/flake.lock" ] && [ ! -w "$dir/flake.lock" ]; then
+          echo "flake.lock is not writable in: $dir" >&2
+          echo "Fix: sudo chown -R $USER:$USER \"$dir\"" >&2
+          return 1
+        fi
+        nix flake update "$dir" && \
+          sudo nixos-rebuild switch --no-reexec --option binary-caches-parallel-connections 40 --flake "$dir#${hostname}"
+      }
+    '';
     # Auto-start Niri on TTY1 with guard variable to prevent infinite loop
     profileExtra = ''
       if [ -z "$DISPLAY" ] && [ "$(tty)" = "/dev/tty1" ] && [ -z "$NIRI_LOADED" ]; then
