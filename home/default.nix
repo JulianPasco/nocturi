@@ -163,6 +163,13 @@
     }
 
     window-rule {
+        // Nautilus with 80% opacity (floating to allow opacity)
+        match app-id=r#".*nautilus.*"#
+        open-floating true
+        opacity 0.8
+    }
+
+    window-rule {
         // Telegram media viewer fullscreen by default
         match app-id=r#"^org\.telegram\.desktop$"# title="^Media viewer$"
         open-fullscreen true
@@ -181,12 +188,15 @@
         // Launch applications
         Mod+T { spawn "kitty"; }
         Mod+Return { spawn "kitty"; }
+        Mod+B { spawn "google-chrome-stable"; }
+        Mod+W { spawn "windsurf"; }
+        Mod+F { spawn "nautilus"; }
 
         Mod+D { spawn "noctalia-shell" "ipc" "call" "launcher" "toggle"; }
         Mod+Space { spawn "noctalia-shell" "ipc" "call" "launcher" "toggle"; }
         Mod+Period { spawn "noctalia-shell" "ipc" "call" "launcher" "emoji"; }
         Mod+V { spawn "noctalia-shell" "ipc" "call" "launcher" "clipboard"; }
-        Super+Escape { spawn "noctalia-shell" "ipc" "call" "lockScreen" "lock"; }
+        Mod+Escape { spawn "noctalia-shell" "ipc" "call" "lockScreen" "lock"; }
 
         // Overview
         Mod+O repeat=false { toggle-overview; }
@@ -269,15 +279,15 @@
         Mod+7 { focus-workspace 7; }
         Mod+8 { focus-workspace 8; }
         Mod+9 { focus-workspace 9; }
-        Mod+Ctrl+1 { move-column-to-workspace 1; }
-        Mod+Ctrl+2 { move-column-to-workspace 2; }
-        Mod+Ctrl+3 { move-column-to-workspace 3; }
-        Mod+Ctrl+4 { move-column-to-workspace 4; }
-        Mod+Ctrl+5 { move-column-to-workspace 5; }
-        Mod+Ctrl+6 { move-column-to-workspace 6; }
-        Mod+Ctrl+7 { move-column-to-workspace 7; }
-        Mod+Ctrl+8 { move-column-to-workspace 8; }
-        Mod+Ctrl+9 { move-column-to-workspace 9; }
+        Mod+Shift+1 { move-column-to-workspace 1; }
+        Mod+Shift+2 { move-column-to-workspace 2; }
+        Mod+Shift+3 { move-column-to-workspace 3; }
+        Mod+Shift+4 { move-column-to-workspace 4; }
+        Mod+Shift+5 { move-column-to-workspace 5; }
+        Mod+Shift+6 { move-column-to-workspace 6; }
+        Mod+Shift+7 { move-column-to-workspace 7; }
+        Mod+Shift+8 { move-column-to-workspace 8; }
+        Mod+Shift+9 { move-column-to-workspace 9; }
 
         // Column management
         Mod+BracketLeft  { consume-or-expel-window-left; }
@@ -288,7 +298,7 @@
         Mod+R { switch-preset-column-width; }
         Mod+Shift+R { switch-preset-window-height; }
         Mod+Ctrl+R { reset-window-height; }
-        Mod+F { maximize-column; }
+        Mod+M { maximize-column; }
         Mod+Shift+F { fullscreen-window; }
         Mod+C { center-column; }
         Mod+Minus { set-column-width "-10%"; }
@@ -477,7 +487,7 @@
       font_family = "JetBrainsMono Nerd Font";
       font_size = 11;
       enable_audio_bell = false;
-      background_opacity = "0.95";
+      background_opacity = "0.80";
     };
   };
 
