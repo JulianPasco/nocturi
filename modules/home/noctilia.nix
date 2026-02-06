@@ -256,10 +256,10 @@
       # Dock
       dock = {
         enabled = true;
-        position = "bottom";
-        displayMode = "auto_hide";
-        backgroundOpacity = 0.61;
-        floatingRatio = 0.22;
+        position = "left";
+        displayMode = "exclusive";
+        backgroundOpacity = 1.0;
+        floatingRatio = 0.0;
         size = 1.18;
         colorizeIcons = true;
       };

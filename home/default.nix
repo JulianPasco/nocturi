@@ -59,8 +59,7 @@
         mouse {
             // Default settings
         }
-        
-        focus-follows-mouse
+ 
     }
 
     layout {

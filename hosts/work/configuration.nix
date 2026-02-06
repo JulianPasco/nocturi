@@ -47,6 +47,7 @@
         model = "epson-inkjet-printer-escpr/Epson-L1455_Series-epson-escpr-en.ppd";
         ppdOptions = {
           PageSize = "A4";
+          MediaType = "PLAIN_NORMAL";  # Default quality: Normal (was Draft)
         };
       }
       {
@@ -56,6 +57,7 @@
         model = "everywhere";  # IPP Everywhere (driverless, color, duplex)
         ppdOptions = {
           PageSize = "A4";
+          MediaType = "PLAIN_NORMAL";
         };
       }
     ];
