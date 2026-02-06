@@ -18,6 +18,10 @@
   # No LUKS encryption on work desktop
   # (add here if work PC gets encrypted later)
 
+  # Fix USB autosuspend issue with printers
+  # Prevents printers from appearing disconnected during USB power management
+  boot.kernelParams = [ "usbcore.autosuspend=-1" ];
+
   # Work-specific printers: Canon G1430, Zebra ZD220, and Epson L1455
   hardware.printers = {
     ensurePrinters = [
