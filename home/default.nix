@@ -461,7 +461,7 @@
     "org/gnome/desktop/wm/keybindings" = {
       close = [ "<Super>q" "<Alt>F4" ];
       minimize = [ "<Super>h" ];
-      toggle-maximized = [ "<Super>Up" ];
+      toggle-maximized = [ "<Super>Up" "<Super>m" ];
       show-desktop = [ "<Super>d" ];
       switch-windows = [ "<Alt>Tab" ];
       switch-windows-backward = [ "<Shift><Alt>Tab" ];
@@ -497,6 +497,7 @@
         "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom3/"
       ];
       home = [ "<Super>e" ];  # Open file manager (Windows style)
+      screensaver = [ "<Super>Escape" ];  # Lock screen (Windows style)
     };
     "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0" = {
       name = "Terminal";
