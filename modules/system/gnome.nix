@@ -110,6 +110,6 @@
   };
 
   # Disable evolution-data-server (heavy background service)
-  services.gnome.evolution-data-server.enable = false;
-  services.gnome.gnome-online-accounts.enable = false;
+  services.gnome.evolution-data-server.enable = lib.mkForce false;
+  services.gnome.gnome-online-accounts.enable = lib.mkForce false;
 }
