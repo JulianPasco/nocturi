@@ -246,10 +246,11 @@
       dot-style-focused = "SOLID";
       dot-style-unfocused = "DOTS";
       dot-position = "BOTTOM";
+      animate-app-switch = true;
       animate-appicon-hover = true;
       animate-appicon-hover-animation-type = "SIMPLE";
       trans-use-custom-bg = true;
-      trans-bg-color = "#202020";
+      trans-bg-color = "#000000";
       trans-use-custom-opacity = true;
       trans-panel-opacity = 0.92;
       show-tooltip = true;
@@ -258,10 +259,11 @@
       group-apps = true;
       isolate-workspaces = false;
       click-action = "CYCLE-MIN";
-      scroll-panel-action = "NOTHING";
+      scroll-panel-action = "CYCLE_WINDOWS";
       hot-keys = true;
       shortcut-text = "";
       stockgs-keep-top-panel = true;  # Keep GNOME top panel visible (for Vitals + clock)
+      stockgs-keep-dash = false;
       show-clock = false;  # Hide clock from bottom panel (keep in top panel only)
     };
 
