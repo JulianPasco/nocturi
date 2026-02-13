@@ -1,41 +1,37 @@
-# Niri + Noctilia + NixOS
+# GNOME Windows 11 + NixOS
 
-**A modern, beautiful, and performant NixOS desktop configuration featuring Niri's scrollable-tiling compositor and Noctilia Shell's stunning interface.**
+**A modern NixOS desktop configuration with GNOME styled to look and feel like Windows 11.**
 
 [![NixOS](https://img.shields.io/badge/NixOS-Unstable-blue.svg)](https://nixos.org/)
-[![Niri](https://img.shields.io/badge/Compositor-Niri-orange.svg)](https://github.com/YaLTeR/niri)
-[![Noctilia](https://img.shields.io/badge/Shell-Noctilia-purple.svg)](https://github.com/noctalia-dev/noctalia-shell)
+[![GNOME](https://img.shields.io/badge/Desktop-GNOME-4A86CF.svg)](https://www.gnome.org/)
+[![Windows 11 Style](https://img.shields.io/badge/Theme-Windows%2011-0078D4.svg)](#)
 
 ## ✨ Features
 
-- **🎨 Beautiful by Default**: Noctilia Shell with Ayu theme
-- **🪟 Unique Window Management**: Niri's scrollable-tiling compositor
+- **🎨 Windows 11 Look**: Fluent theme, bottom taskbar, Start menu, blur effects
+- **🪟 GNOME Desktop**: Full-featured desktop environment with GDM
 - **⚡ Blazing Fast**: zram swap, tmpfs caching, optimized VM settings
-- **🔒 Secure**: Wayland-native, no X11, proper portal configuration
-- **📦 Reproducible**: NixOS flakes ensure identical setups across machines
+- ** Reproducible**: NixOS flakes ensure identical setups across machines
 - **🧩 DRY Architecture**: Shared base config, host-specific overrides only
 - **⚙️ Easy Customization**: Single `user-config.nix` file for personal settings
 
 ## 🎥 What You Get
 
-### Niri Compositor
-- Scrollable-tiling window management (Super+H/L to scroll)
-- Smooth 60fps animations
-- Per-monitor workspaces
-- Dynamic workspace creation
-- Native Wayland, no X11 dependencies
-
-### Noctilia Shell
-- Stunning desktop shell with widgets
-- App launcher with fuzzy search
-- Control center with power profiles
-- Lock screen that matches your theme
-- System monitor, calendar, weather
-- Media controls and notifications
+### Windows 11 Style GNOME
+- Bottom taskbar with centered app icons (Dash to Panel)
+- Windows 11 Start Menu with search and pinned apps (ArcMenu)
+- Acrylic/Mica blur effects on panel and overview (Blur My Shell)
+- Rounded window corners (12px radius)
+- Fluent-Dark GTK theme + Fluent icon theme + Bibata cursor
+- Dark mode throughout, night light enabled
+- Minimize/Maximize/Close buttons on the right
+- Edge tiling (snap windows to edges)
+- System tray with app indicators
+- Clipboard history (like Win+V)
 
 ### Performance Optimizations
-- **zram**: 50% RAM compressed swap
-- **tmpfs**: 3GB in-memory cache
+- **zram**: 30% RAM compressed swap
+- **tmpfs**: 1.5GB in-memory cache
 - **VM tuning**: Optimized swappiness and dirty ratios
 - **Nix caching**: Fast rebuilds with parallel builds
 - **Auto GC**: Weekly cleanup of old generations
@@ -148,19 +144,23 @@ sudo nixos-rebuild switch --flake ~/nixos-config#home
 sudo reboot
 ```
 
-✅ **Done!** After reboot, log in at the terminal and Niri will start automatically.
+✅ **Done!** After reboot, GDM will greet you with a login screen. Log in and enjoy your Windows 11-style GNOME desktop.
 
 ## ⌨️ Keybindings
 
 | Key | Action |
 |-----|--------|
 | `Super+T` | Terminal (Kitty) |
-| `Super+D` / `Super+Space` | Launcher |
-| `Super+Escape` | Lock screen |
-| `Super+Q` | Close window |
-| `Super+H/L` | Scroll workspaces |
-| `Super+Shift+H/L` | Move window between workspaces |
-| `Super+Left/Right/Up/Down` | Focus window |
+| `Super+B` | Browser (Google Chrome) |
+| `Super+W` | Windsurf |
+| `Super+E` | File Manager (Nautilus) |
+| `Super+F` | File Manager (Nautilus) |
+| `Super+D` | Show Desktop |
+| `Super+Q` / `Alt+F4` | Close window |
+| `Alt+Tab` | Switch windows |
+| `Super+Up` | Toggle maximize |
+| `Super+1-4` | Switch workspace |
+| `Super+Shift+1-4` | Move window to workspace |
 
 See `home/default.nix` for complete list.
 
@@ -171,12 +171,11 @@ See `home/default.nix` for complete list.
 ├── user-config.nix              # ⭐ YOUR PERSONAL SETTINGS (edit this!)
 ├── modules/
 │   ├── base/                    # Shared config for all hosts
-│   ├── home/                    # Noctilia Shell config
-│   └── system/                  # Niri system integration
+│   └── system/                  # GNOME desktop + extensions
 ├── hosts/
 │   ├── home/                    # Laptop config (bluetooth, battery)
 │   └── work/                    # Desktop config
-└── home/                        # User packages and settings
+└── home/                        # User packages, GNOME dconf settings
 ```
 
 ### Configuration Points
@@ -187,20 +186,20 @@ See `home/default.nix` for complete list.
 
 **Host-specific**: `hosts/{hostname}/configuration.nix` (overrides for single machine)
 
-**User interface**: `modules/home/noctilia.nix` (Noctilia appearance - advanced)
+**GNOME system config**: `modules/system/gnome.nix` (extensions, themes, excluded packages)
 
-**User apps**: `home/default.nix` (packages and home-manager settings)
+**User apps + GNOME dconf**: `home/default.nix` (packages, Win11 dconf settings, keybindings)
 
 ## 🎨 Customization
 
 ### Change Theme
-Edit `modules/home/noctilia.nix`:
+Edit `home/default.nix` GTK section and dconf `org/gnome/desktop/interface`:
 ```nix
-colorSchemes.predefinedScheme = "Ayu";  # or "Catppuccin", "TokyoNight", etc.
+gtk.theme.name = "Fluent-Dark";  # Change GTK theme
 ```
 
 ### Change Wallpapers
-Place images in `~/Pictures/Wallpapers/` and they'll rotate automatically (or set `automationEnabled = false` for static).
+Edit the wallpaper paths in `home/default.nix` under `org/gnome/desktop/background`.
 
 ### Add Packages
 Edit `home/default.nix` and add to `home.packages`:
@@ -210,11 +209,8 @@ home.packages = with pkgs; [
 ];
 ```
 
-### Change Power Profile
-Default is `powersaver`. To change, edit `modules/home/noctilia.nix`:
-```nix
-startup = "noctalia-shell ipc call powerProfile set performance";
-```
+### Add/Remove GNOME Extensions
+Edit `modules/system/gnome.nix` to install extensions, then enable them in `home/default.nix` under `dconf.settings."org/gnome/shell".enabled-extensions`.
 
 ## 🚀 Adding Another Machine
 
@@ -255,7 +251,7 @@ sudo nixos-rebuild switch --flake ~/nixos-config#work
 
 ### Update System Packages
 
-This updates NixOS packages, Niri, and Noctilia to their latest versions:
+This updates NixOS packages and GNOME extensions to their latest versions:
 
 ```bash
 cd ~/nixos-config
@@ -286,13 +282,13 @@ Or select a previous generation from the boot menu.
 
 ## 🔧 Features
 
-- ✅ TTY auto-login to Niri (no display manager overhead)
-- ✅ Wayland-native (no X11)
-- ✅ XDG portals configured (screen sharing works)
+- ✅ GNOME desktop with GDM display manager
+- ✅ Windows 11-style UI (taskbar, start menu, blur, rounded corners)
+- ✅ Wayland-native with XDG portals
 - ✅ PipeWire audio
 - ✅ Power management (battery, power profiles)
 - ✅ Bluetooth support (on laptop)
-- ✅ Calendar and weather integration
+- ✅ Night light (automatic color temperature)
 - ✅ Tailscale VPN
 - ✅ Firefox with Wayland
 - ✅ Automatic Nix store optimization
@@ -308,8 +304,10 @@ MIT License - feel free to use and modify.
 
 ## 🙏 Credits
 
-- [Niri](https://github.com/YaLTeR/niri) - Scrollable-tiling Wayland compositor
-- [Noctilia Shell](https://github.com/noctalia-dev/noctalia-shell) - Beautiful desktop shell
+- [GNOME](https://www.gnome.org/) - Desktop environment
+- [Dash to Panel](https://extensions.gnome.org/extension/1160/dash-to-panel/) - Windows-style taskbar
+- [ArcMenu](https://extensions.gnome.org/extension/3628/arcmenu/) - Windows 11 start menu
+- [Fluent GTK Theme](https://github.com/vinceliuice/Fluent-gtk-theme) - Windows 11-style theme
 - [NixOS](https://nixos.org/) - Declarative Linux distribution
 
 ---
