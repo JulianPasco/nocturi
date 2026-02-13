@@ -136,7 +136,7 @@
     enable = true;
     settings = {
       font_family = "JetBrainsMono Nerd Font";
-      font_size = 11;
+      font_size = 13;
       enable_audio_bell = false;
       background_opacity = "0.80";
     };
@@ -326,12 +326,12 @@
       workspace-switcher-size = 0;
       animation = 2;  # Faster animations
       notification-banner-position = 1;  # Center
-      hot-corner = false;  # Disable hot corners (not Win11 behavior)
+      hot-corner = true;  # Disable hot corners (not Win11 behavior)
       ripple-box = false;  # Disable click ripple
       window-demands-attention-focus = false;
       overlay-key = true;
       double-super-to-appgrid = true;
-      window-maximized-on-create = true;
+      window-maximized-on-create = false;
     };
 
     # --- Rounded Window Corners ---
