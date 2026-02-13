@@ -234,7 +234,10 @@
     "org/gnome/shell/extensions/dash-to-panel" = {
       panel-positions = ''{"0":"BOTTOM","1":"BOTTOM"}'';
       panel-sizes = ''{"0":44,"1":44}'';
-      panel-element-positions = ''{"0":[{"element":"showAppsButton","visible":false,"position":"stackedTL"},{"element":"activitiesButton","visible":false,"position":"stackedTL"},{"element":"leftBox","visible":true,"position":"stackedTL"},{"element":"taskbar","visible":true,"position":"centerMonitor"},{"element":"centerBox","visible":false,"position":"stackedBR"},{"element":"rightBox","visible":true,"position":"stackedBR"},{"element":"dateMenu","visible":true,"position":"stackedBR"},{"element":"systemMenu","visible":true,"position":"stackedBR"},{"element":"desktopButton","visible":true,"position":"stackedBR"}]}'';
+      panel-element-positions = ''{"0":[{"element":"showAppsButton","visible":true,"position":"stackedTL"},{"element":"activitiesButton","visible":false,"position":"stackedTL"},{"element":"leftBox","visible":true,"position":"stackedTL"},{"element":"taskbar","visible":true,"position":"centerMonitor"},{"element":"centerBox","visible":false,"position":"stackedBR"},{"element":"rightBox","visible":true,"position":"stackedBR"},{"element":"dateMenu","visible":true,"position":"stackedBR"},{"element":"systemMenu","visible":true,"position":"stackedBR"},{"element":"desktopButton","visible":true,"position":"stackedBR"}]}'';
+      show-apps-icon-file = "/home/${userConfig.username}/nixos-config/assets/windows11-start.svg";
+      show-apps-icon-padding = 6;
+      show-apps-icon-side-padding = 4;
       appicon-margin = 4;
       appicon-padding = 6;
       dot-style-focused = "SOLID";
@@ -257,37 +260,19 @@
       shortcut-text = "";
     };
 
-    # --- ArcMenu (Windows 11 Start Menu) ---
+    # --- ArcMenu (Runner only - triggered by Super key) ---
     "org/gnome/shell/extensions/arcmenu" = {
-      # Panel button: Windows 11 start icon
+      # Hide ArcMenu's panel button (we use Dash to Panel's Show Apps button instead)
       menu-button-appearance = "Icon";
-      menu-button-icon = "Custom_Icon";
-      custom-menu-button-icon = "/home/${userConfig.username}/nixos-config/assets/windows11-start.svg";
-      custom-menu-button-icon-size = 36.0;
-      # Main menu: Windows 11 "Eleven" layout (click on icon)
-      menu-layout = "Eleven";
-      menu-width = 750;
-      menu-height = 650;
-      search-entry-border-radius = "(8, 8, 8, 8)";
-      eleven-extra-buttons = [
-        (lib.hm.gvariant.mkTuple [ "Settings" "org.gnome.Settings" ])
-        (lib.hm.gvariant.mkTuple [ "Files" "org.gnome.Nautilus" ])
-      ];
+      custom-menu-button-icon-size = 0.0;
+      # Main layout set to Runner
+      menu-layout = "Runner";
       # Standalone Runner: opens on Super key press
       enable-standlone-runner-menu = true;
       runner-menu-hotkey = "Super_L";
       runner-position = 0;  # Top centered
       runner-show-frequent-apps = true;
       runner-search-display-style = "List";
-      # Pinned apps in Eleven layout
-      pinned-app-list = [
-        "Google Chrome" "" "google-chrome.desktop"
-        "Files" "" "org.gnome.Nautilus.desktop"
-        "Terminal" "" "kitty.desktop"
-        "Windsurf" "" "windsurf.desktop"
-        "Settings" "" "org.gnome.Settings.desktop"
-        "Telegram" "" "org.telegram.desktop.desktop"
-      ];
     };
 
     # --- Blur My Shell (Acrylic/Mica effect) ---
