@@ -237,7 +237,7 @@
     "org/gnome/shell/extensions/dash-to-panel" = {
       panel-positions = ''{"0":"BOTTOM","1":"BOTTOM"}'';
       panel-sizes = ''{"0":44,"1":44}'';
-      panel-element-positions = ''{"0":[{"element":"showAppsButton","visible":true,"position":"stackedTL"},{"element":"activitiesButton","visible":false,"position":"stackedTL"},{"element":"leftBox","visible":true,"position":"stackedTL"},{"element":"taskbar","visible":true,"position":"centerMonitor"},{"element":"centerBox","visible":false,"position":"stackedBR"},{"element":"rightBox","visible":true,"position":"stackedBR"},{"element":"dateMenu","visible":true,"position":"stackedBR"},{"element":"systemMenu","visible":true,"position":"stackedBR"},{"element":"desktopButton","visible":true,"position":"stackedBR"}]}'';
+      panel-element-positions = ''{"0":[{"element":"showAppsButton","visible":true,"position":"stackedTL"},{"element":"activitiesButton","visible":false,"position":"stackedTL"},{"element":"leftBox","visible":true,"position":"stackedTL"},{"element":"taskbar","visible":false,"position":"centerMonitor"},{"element":"centerBox","visible":false,"position":"stackedBR"},{"element":"rightBox","visible":false,"position":"stackedBR"},{"element":"dateMenu","visible":false,"position":"stackedBR"},{"element":"systemMenu","visible":false,"position":"stackedBR"},{"element":"desktopButton","visible":true,"position":"stackedBR"}]}'';
       show-apps-icon-file = "/home/${userConfig.username}/nixos-config/assets/windows11-start.svg";
       show-apps-icon-padding = 6;
       show-apps-icon-side-padding = 4;
@@ -381,7 +381,7 @@
       clock-show-weekday = true;
       clock-show-seconds = false;
       show-battery-percentage = true;
-      text-scaling-factor = 1.25;  # 125% zoom
+      text-scaling-factor = 1.0;  # Default zoom (Inter font is already clean at native size)
     };
 
     # Window titlebar buttons (Windows 11: minimize, maximize, close on right)
