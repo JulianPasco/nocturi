@@ -184,7 +184,7 @@
           echo "Fix: sudo chown -R $USER:$USER \"$dir\"" >&2
           return 1
         fi
-        nix flake update "$dir" && \
+        (cd "$dir" && nix flake update) && \
           sudo nixos-rebuild switch --no-reexec --option binary-caches-parallel-connections 40 --flake "$dir#${hostname}"
       }
     '';
