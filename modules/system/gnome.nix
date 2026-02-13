@@ -13,24 +13,6 @@
   # Enable polkit for authentication dialogs
   security.polkit.enable = true;
 
-  # Configure GDM background (login screen wallpaper)
-  # Create dconf profile for GDM
-  programs.dconf.profiles.gdm = {
-    databases = [{
-      settings = {
-        "org/gnome/desktop/background" = {
-          picture-uri = lib.mkForce "file:///home/${userConfig.username}/${userConfig.wallpaperDir}/wallpaper.jpg";
-          picture-uri-dark = lib.mkForce "file:///home/${userConfig.username}/${userConfig.wallpaperDir}/wallpaper.jpg";
-          picture-options = "zoom";
-        };
-        "org/gnome/desktop/screensaver" = {
-          picture-uri = lib.mkForce "file:///home/${userConfig.username}/${userConfig.wallpaperDir}/wallpaper.jpg";
-          picture-options = "zoom";
-        };
-      };
-    }];
-  };
-
   # Remove GNOME bloat - keep only essentials
   environment.gnome.excludePackages = with pkgs; [
     gnome-tour
