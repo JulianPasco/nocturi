@@ -14,33 +14,22 @@
   security.polkit.enable = true;
 
   # Configure GDM background (login screen wallpaper)
-  systemd.tmpfiles.rules = [
-    "d /run/gdm/.config 0711 gdm gdm"
-    "d /run/gdm/.config/dconf 0711 gdm gdm"
-  ];
-  
-  # Set GDM background to match user wallpaper
-  environment.etc."dconf/db/gdm.d/01-background".text = ''
-    [org/gnome/desktop/background]
-    picture-uri='file:///home/${userConfig.username}/${userConfig.wallpaperDir}/wallpaper.jpg'
-    picture-uri-dark='file:///home/${userConfig.username}/${userConfig.wallpaperDir}/wallpaper.jpg'
-    picture-options='zoom'
-    
-    [org/gnome/desktop/screensaver]
-    picture-uri='file:///home/${userConfig.username}/${userConfig.wallpaperDir}/wallpaper.jpg'
-    picture-options='zoom'
-  '';
-  
-  environment.etc."dconf/db/gdm.d/locks/background".text = ''
-    /org/gnome/desktop/background/picture-uri
-    /org/gnome/desktop/background/picture-uri-dark
-    /org/gnome/desktop/screensaver/picture-uri
-  '';
-  
-  # Update dconf database
-  system.activationScripts.gdm-dconf = ''
-    ${pkgs.dconf}/bin/dconf update
-  '';
+  # Create dconf profile for GDM
+  programs.dconf.profiles.gdm = {
+    databases = [{
+      settings = {
+        "org/gnome/desktop/background" = {
+          picture-uri = lib.mkForce "file:///home/${userConfig.username}/${userConfig.wallpaperDir}/wallpaper.jpg";
+          picture-uri-dark = lib.mkForce "file:///home/${userConfig.username}/${userConfig.wallpaperDir}/wallpaper.jpg";
+          picture-options = "zoom";
+        };
+        "org/gnome/desktop/screensaver" = {
+          picture-uri = lib.mkForce "file:///home/${userConfig.username}/${userConfig.wallpaperDir}/wallpaper.jpg";
+          picture-options = "zoom";
+        };
+      };
+    }];
+  };
 
   # Remove GNOME bloat - keep only essentials
   environment.gnome.excludePackages = with pkgs; [
