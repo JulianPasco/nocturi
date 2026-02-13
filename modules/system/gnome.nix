@@ -82,6 +82,7 @@
     gnomeExtensions.rounded-window-corners-reborn  # Rounded corners like Win11
     gnomeExtensions.compiz-windows-effect  # Window animations
     gnomeExtensions.clipboard-indicator    # Clipboard manager (Win+V)
+    gnomeExtensions.vitals                 # System resources (CPU, RAM, temp, net)
     gnomeExtensions.gsconnect              # Phone integration
   ];
 

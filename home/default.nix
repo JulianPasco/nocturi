@@ -78,9 +78,6 @@
     # Fonts
     nerd-fonts.jetbrains-mono  # JetBrains Mono Nerd Font
     inter                      # Inter font (closest to Win11 Segoe UI)
-    
-    # Top bar
-    waybar                     # Status bar (system resources + window title)
   ];
 
   # Session variables for Electron apps on Wayland
@@ -224,11 +221,13 @@
         "appindicatorsupport@rgcjonas.gmail.com"
         "rounded-window-corners@fxgn"
         "clipboard-indicator@tudmotu.com"
+        "Vitals@CoreCoding.com"
       ];
       favorite-apps = [
         "google-chrome.desktop"
         "org.gnome.Nautilus.desktop"
         "kitty.desktop"
+        "com.rtosta.zapzap.desktop"
         "codium.desktop"
         "org.telegram.desktop.desktop"
       ];
@@ -262,6 +261,7 @@
       scroll-panel-action = "NOTHING";
       hot-keys = true;
       shortcut-text = "";
+      stockgs-keep-top-panel = true;  # Keep GNOME top panel visible (for Vitals + clock)
     };
 
     # --- ArcMenu (Runner only - triggered by Super key) ---
@@ -332,6 +332,29 @@
       global-rounded-corner-settings = "{'padding': <{'left': <uint32 1>, 'right': <uint32 1>, 'top': <uint32 1>, 'bottom': <uint32 1>}>, 'keep_rounded_corners': <{'maximized': <false>, 'fullscreen': <false>}>, 'border_radius': <uint32 12>, 'smoothing': <uint32 0>}";
       skip-libadwaita-app = false;
       skip-libhandy-app = false;
+    };
+
+    # --- Vitals (system resources in top panel) ---
+    "org/gnome/shell/extensions/vitals" = {
+      hot-sensors = [
+        "_processor_usage_"
+        "_memory_usage_"
+        "_temperature_k10temp_tctl_"
+        "_network-rx_enp42s0_"
+      ];
+      position-in-panel = 2;  # Right side of top panel
+      use-higher-precision = false;
+      show-temperature = true;
+      show-voltage = false;
+      show-fan = false;
+      show-memory = true;
+      show-processor = true;
+      show-network = true;
+      show-storage = false;
+      show-battery = false;
+      fixed-widths = true;
+      hide-icons = false;
+      icon-style = 1;  # Symbolic icons
     };
 
     # --- Clipboard Indicator ---
@@ -488,128 +511,6 @@
       command = "nautilus";
       binding = "<Super>f";
     };
-  };
-
-  # ========================================================================
-  # Waybar Top Bar (system resources + window title, like Hyprland/Niri)
-  # ========================================================================
-
-  # Helper script to get active window title on GNOME
-  home.file.".local/bin/gnome-window-title" = {
-    executable = true;
-    text = ''
-      #!/bin/sh
-      gdbus call --session --dest org.gnome.Shell --object-path /org/gnome/Shell \
-        --method org.gnome.Shell.Eval \
-        'global.display.focus_window ? global.display.focus_window.get_title() : ""' \
-        2>/dev/null | sed "s/^(true, '//;s/')$//" | head -c 80
-    '';
-  };
-
-  # Waybar configuration
-  programs.waybar = {
-    enable = true;
-    systemd = {
-      enable = true;
-      target = "graphical-session.target";
-    };
-    settings = {
-      topbar = {
-        layer = "top";
-        position = "top";
-        height = 28;
-        margin-top = 0;
-        margin-left = 0;
-        margin-right = 0;
-        modules-left = [ "custom/window-title" ];
-        modules-center = [ ];
-        modules-right = [ "cpu" "memory" "temperature" "network" "clock" ];
-
-        "custom/window-title" = {
-          exec = "~/.local/bin/gnome-window-title";
-          interval = 1;
-          max-length = 80;
-          format = "{}";
-          tooltip = false;
-        };
-
-        cpu = {
-          format = "  {usage}%";
-          interval = 3;
-          tooltip = true;
-        };
-
-        memory = {
-          format = "  {percentage}%";
-          interval = 5;
-          tooltip-format = "{used:0.1f}G / {total:0.1f}G";
-        };
-
-        temperature = {
-          format = " {temperatureC}°C";
-          critical-threshold = 80;
-          format-critical = " {temperatureC}°C";
-          interval = 5;
-        };
-
-        network = {
-          format-wifi = "  {bandwidthDownBits}";
-          format-ethernet = "  {bandwidthDownBits}";
-          format-disconnected = "  Off";
-          interval = 3;
-          tooltip-format = "{ifname}: {ipaddr}";
-        };
-
-        clock = {
-          format = "  {:%H:%M}";
-          format-alt = "  {:%a %d %b %H:%M}";
-          tooltip-format = "<tt>{calendar}</tt>";
-        };
-      };
-    };
-    style = ''
-      * {
-        font-family: "Inter", "JetBrainsMono Nerd Font", sans-serif;
-        font-size: 12px;
-        min-height: 0;
-      }
-
-      window#waybar {
-        background-color: rgba(20, 20, 30, 0.85);
-        color: #e0e0e0;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-      }
-
-      #custom-window-title {
-        color: #ffffff;
-        padding: 0 12px;
-        font-weight: 500;
-      }
-
-      #cpu, #memory, #temperature, #network, #clock {
-        padding: 0 10px;
-        color: #b0b0b0;
-      }
-
-      #cpu { color: #7eb8da; }
-      #memory { color: #a0d0a0; }
-      #temperature { color: #e0a070; }
-      #temperature.critical { color: #ff6060; }
-      #network { color: #90b0d0; }
-
-      #clock {
-        color: #ffffff;
-        font-weight: 500;
-        padding-right: 14px;
-      }
-
-      tooltip {
-        background-color: rgba(30, 30, 45, 0.95);
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        border-radius: 8px;
-        color: #e0e0e0;
-      }
-    '';
   };
 
   # Home Manager state version
