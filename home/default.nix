@@ -241,17 +241,17 @@
       show-apps-icon-file = "/home/${userConfig.username}/nixos-config/assets/windows11-start.svg";
       show-apps-icon-padding = 6;
       show-apps-icon-side-padding = 4;
-      appicon-margin = 4;
-      appicon-padding = 6;
+      appicon-margin = 6;
+      appicon-padding = 8;
       dot-style-focused = "SOLID";
       dot-style-unfocused = "DOTS";
       dot-position = "BOTTOM";
       animate-appicon-hover = true;
       animate-appicon-hover-animation-type = "SIMPLE";
       trans-use-custom-bg = true;
-      trans-bg-color = "#1a1a2e";
+      trans-bg-color = "#202020";
       trans-use-custom-opacity = true;
-      trans-panel-opacity = 0.85;
+      trans-panel-opacity = 0.92;
       show-tooltip = true;
       show-favorites = true;
       show-running-apps = true;
@@ -282,18 +282,19 @@
 
     # --- Blur My Shell (Acrylic/Mica effect) ---
     "org/gnome/shell/extensions/blur-my-shell" = {
-      brightness = 0.75;
-      sigma = 25;
-      noise-amount = 0.0;
+      brightness = 0.85;
+      sigma = 30;
+      noise-amount = 0.05;
       color-and-noise = true;
     };
     "org/gnome/shell/extensions/blur-my-shell/panel" = {
       blur = true;
-      brightness = 0.75;
-      sigma = 20;
+      brightness = 0.85;
+      sigma = 25;
       override-background = true;
       style-panel = 0;
       override-background-dynamically = false;
+      unblur-in-overview = false;
     };
     "org/gnome/shell/extensions/blur-my-shell/overview" = {
       blur = true;
@@ -301,10 +302,11 @@
     };
     "org/gnome/shell/extensions/blur-my-shell/dash-to-panel" = {
       blur = true;
-      brightness = 0.75;
-      sigma = 20;
+      brightness = 0.88;
+      sigma = 28;
       override-background = true;
       style-dash-to-panel = 0;
+      unblur-in-overview = false;
     };
     "org/gnome/shell/extensions/blur-my-shell/lockscreen" = {
       blur = true;
@@ -330,7 +332,7 @@
 
     # --- Rounded Window Corners ---
     "org/gnome/shell/extensions/rounded-window-corners" = {
-      global-rounded-corner-settings = "{'padding': <{'left': <uint32 1>, 'right': <uint32 1>, 'top': <uint32 1>, 'bottom': <uint32 1>}>, 'keep_rounded_corners': <{'maximized': <false>, 'fullscreen': <false>}>, 'border_radius': <uint32 12>, 'smoothing': <uint32 0>}";
+      global-rounded-corner-settings = "{'padding': <{'left': <uint32 1>, 'right': <uint32 1>, 'top': <uint32 1>, 'bottom': <uint32 1>}>, 'keep_rounded_corners': <{'maximized': <false>, 'fullscreen': <false>}>, 'border_radius': <uint32 8>, 'smoothing': <uint32 1>}";
       skip-libadwaita-app = false;
       skip-libhandy-app = false;
     };
