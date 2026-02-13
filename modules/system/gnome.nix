@@ -30,6 +30,9 @@
     gnome-logs      # Log viewer
     snapshot        # Camera app
     gnome-system-monitor # System monitor (we use htop/btop)
+    gnome-calendar       # Calendar (we don't use)
+    evolution            # Email client (we don't use)
+    evolution-data-server # Calendar/contacts backend (heavy service)
     tali
     iagno
     hitori
@@ -80,10 +83,8 @@
     gnomeExtensions.just-perfection        # Fine-tune shell appearance
     gnomeExtensions.appindicator           # System tray icons
     gnomeExtensions.rounded-window-corners-reborn  # Rounded corners like Win11
-    gnomeExtensions.compiz-windows-effect  # Window animations
     gnomeExtensions.clipboard-indicator    # Clipboard manager (Win+V)
     gnomeExtensions.vitals                 # System resources (CPU, RAM, temp, net)
-    gnomeExtensions.gsconnect              # Phone integration
   ];
 
   # Ensure necessary services are enabled
@@ -101,8 +102,14 @@
     xdgOpenUsePortal = true;
   };
 
-  # Disable GNOME Software auto-start and background updates
+  # Performance and auto-start optimizations
   environment.sessionVariables = {
     GNOME_SOFTWARE_AUTOSTART = "false";
+    MUTTER_DEBUG_ENABLE_ATOMIC_KMS = "1";  # Better frame pacing
+    MUTTER_DEBUG_FORCE_KMS_MODE = "simple"; # Reduce compositor overhead
   };
+
+  # Disable evolution-data-server (heavy background service)
+  services.gnome.evolution-data-server.enable = false;
+  services.gnome.gnome-online-accounts.enable = false;
 }

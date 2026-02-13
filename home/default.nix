@@ -282,19 +282,19 @@
 
     # --- Blur My Shell (Acrylic/Mica effect) ---
     "org/gnome/shell/extensions/blur-my-shell" = {
-      brightness = 0.85;
-      sigma = 30;
-      noise-amount = 0.05;
-      color-and-noise = true;
+      brightness = 0.80;
+      sigma = 18;
+      noise-amount = 0.0;
+      color-and-noise = false;
     };
     "org/gnome/shell/extensions/blur-my-shell/panel" = {
       blur = true;
-      brightness = 0.85;
-      sigma = 25;
+      brightness = 0.80;
+      sigma = 15;
       override-background = true;
       style-panel = 0;
       override-background-dynamically = false;
-      unblur-in-overview = false;
+      unblur-in-overview = true;
     };
     "org/gnome/shell/extensions/blur-my-shell/overview" = {
       blur = true;
@@ -302,15 +302,15 @@
     };
     "org/gnome/shell/extensions/blur-my-shell/dash-to-panel" = {
       blur = true;
-      brightness = 0.88;
-      sigma = 28;
+      brightness = 0.82;
+      sigma = 16;
       override-background = true;
       style-dash-to-panel = 0;
-      unblur-in-overview = false;
+      unblur-in-overview = true;
     };
     "org/gnome/shell/extensions/blur-my-shell/lockscreen" = {
       blur = true;
-      sigma = 30;
+      sigma = 20;
     };
 
     # --- Just Perfection (UI fine-tuning) ---
