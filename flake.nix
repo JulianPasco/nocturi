@@ -1,5 +1,5 @@
 {
-  description = "NixOS configuration with Niri and Noctilia";
+  description = "NixOS configuration with GNOME (Windows 11 style)";
 
   inputs = {
     # NixOS unstable packages
@@ -13,21 +13,9 @@
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    
-    # Niri window manager
-    niri-flake = {
-      url = "github:sodiboo/niri-flake";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-    
-    # Noctilia shell
-    noctalia = {
-      url = "github:noctalia-dev/noctalia-shell/caf2302cea25c609c1ba7b6834f9e5aecff08a91";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
   };
 
-  outputs = inputs@{ self, nixpkgs, nixpkgs-unstable, home-manager, niri-flake, noctalia, ... }:
+  outputs = inputs@{ self, nixpkgs, nixpkgs-unstable, home-manager, ... }:
     let
       system = "x86_64-linux";
       pkgs = nixpkgs.legacyPackages.${system};
@@ -45,9 +33,7 @@
         specialArgs = { inherit inputs hostname userConfig pkgs-unstable; };
         modules = [
           ./hosts/${hostname}/configuration.nix
-          ./modules/system/niri.nix
-          # XWayland Satellite currently doesn't provide a NixOS module
-          # We configure it directly in the niri.nix module
+          ./modules/system/gnome.nix
           home-manager.nixosModules.home-manager
           {
             home-manager = {

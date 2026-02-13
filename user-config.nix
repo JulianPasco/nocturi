@@ -21,7 +21,7 @@
     work = "nixos-work";  # Work PC hostname
   };
   
-  # Location for weather widget (Noctilia Shell)
+  # Location (for weather/geolocation)
   location = {
     latitude = -26.2041;   # Johannesburg coordinates - change to your location
     longitude = 28.0473;

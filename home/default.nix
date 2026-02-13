@@ -1,345 +1,13 @@
 # Home Manager configuration
-{ config, pkgs, pkgs-unstable, inputs, hostname, userConfig, ... }:
+{ config, lib, pkgs, pkgs-unstable, inputs, hostname, userConfig, ... }:
 
 {
-  imports = [
-    # Import the Noctilia home manager module
-    inputs.noctalia.homeModules.default
-    # Shared Noctilia configuration (synced between home and work)
-    ../modules/home/noctilia.nix
-  ];
-
   # Home Manager basic configuration
   home.username = userConfig.username;
   home.homeDirectory = "/home/${userConfig.username}";
 
   # Let Home Manager install and manage itself
   programs.home-manager.enable = true;
-
-  # Set default wallpaper for Noctalia Shell
-  home.file.".cache/noctalia/wallpapers.json" = {
-    text = builtins.toJSON {
-      defaultWallpaper = "/home/${userConfig.username}/${userConfig.wallpaperDir}/Balcony-ja.png";
-      wallpapers = {};
-    };
-  };
-
-  # Noctalia Shell configuration is imported from ../modules/home/noctilia.nix
-  # This allows settings to be shared between home and work machines
-
-  # Configure Niri through home-manager
-  xdg.configFile."niri/config.kdl".text = ''
-    // Niri configuration
-    // Based on default config: https://yalter.github.io/niri/Configuration:-Introduction
-
-    ${if hostname == "work" then ''
-    // Work dual-screen monitor layout
-    output "HDMI-A-3" {
-        position x=1920 y=0
-    }
-    
-    output "DP-1" {
-        position x=0 y=0
-    }
-    '' else ""}
-
-    input {
-        keyboard {
-            xkb {
-                layout "za"
-            }
-            numlock
-        }
-
-        touchpad {
-            tap
-            natural-scroll
-        }
-
-        mouse {
-            // Default settings
-        }
- 
-    }
-
-    layout {
-        gaps 16
-        center-focused-column "never"
-        always-center-single-column
-        background-color "transparent"
-
-        preset-column-widths {
-            proportion 0.33333
-            proportion 0.5
-            proportion 0.66667
-            proportion 1.0
-        }
-
-        default-column-width { proportion 0.5; }
-
-        focus-ring {
-            width 2
-            active-gradient from="#FF8F40" to="#FFCC66" angle=45 relative-to="workspace-view"
-            inactive-gradient from="#40404080" to="#50505080" angle=45 relative-to="workspace-view"
-        }
-
-        border {
-            off
-        }
-
-        shadow {
-            on
-            softness 30
-            spread 5
-            offset x=0 y=5
-            color "#00000070"
-        }
-    }
-
-    // Start XWayland satellite for X11 apps (Chrome, Windsurf, VSCode)
-    spawn-at-startup "xwayland-satellite" ":0"
-
-    environment {
-        // Needed for XWayland apps with xwayland-satellite
-        DISPLAY ":0"
-    }
-
-    prefer-no-csd
-
-    screenshot-path "~/Pictures/Screenshots/Screenshot from %Y-%m-%d %H-%M-%S.png"
-
-    hotkey-overlay {
-        skip-at-startup
-    }
-
-    animations {
-        slowdown 0.8
-    }
-
-    // Set the regular wallpaper on the backdrop
-    layer-rule {
-        match namespace="^noctalia-wallpaper*"
-        place-within-backdrop true
-    }
-
-    overview {
-        workspace-shadow {
-            off
-        }
-    }
-
-    window-rule {
-        // Rounded corners for a modern look
-        geometry-corner-radius 15
-        clip-to-geometry true
-    }
-
-    window-rule {
-        // Windsurf maximized by default
-        match app-id=r#"[Ww]indsurf"#
-        open-maximized true
-    }
-
-    window-rule {
-        // Google Chrome maximized by default  
-        match app-id=r#"[Gg]oogle-chrome"#
-        open-maximized true
-    }
-
-    window-rule {
-        // Firefox Picture-in-Picture as floating
-        match app-id="firefox$" title="^Picture-in-Picture$"
-        open-floating true
-        default-column-width { fixed 480; }
-        default-window-height { fixed 270; }
-    }
-
-    window-rule {
-        // Bitwarden as floating centered window
-        match app-id="Bitwarden$"
-        open-floating true
-        default-column-width { fixed 800; }
-    }
-
-    window-rule {
-        // Nautilus with 80% opacity (floating to allow opacity)
-        match app-id=r#".*nautilus.*"#
-        open-floating true
-        opacity 0.8
-    }
-
-    window-rule {
-        // Telegram media viewer fullscreen by default
-        match app-id=r#"^org\.telegram\.desktop$"# title="^Media viewer$"
-        open-fullscreen true
-    }
-
-    window-rule {
-        // File pickers as floating
-        match title="^(Open|Save) .*"
-        open-floating true
-    }
-
-    binds {
-        // Hotkey help overlay
-        Mod+Shift+Slash { show-hotkey-overlay; }
-
-        // Launch applications
-        Mod+T { spawn "kitty"; }
-        Mod+Return { spawn "kitty"; }
-        Mod+B { spawn "google-chrome-stable"; }
-        Mod+W { spawn "windsurf"; }
-        Mod+F { spawn "nautilus"; }
-
-        Mod+D { spawn "noctalia-shell" "ipc" "call" "launcher" "toggle"; }
-        Mod+Space { spawn "noctalia-shell" "ipc" "call" "launcher" "toggle"; }
-        Mod+Period { spawn "noctalia-shell" "ipc" "call" "launcher" "emoji"; }
-        Mod+V { spawn "noctalia-shell" "ipc" "call" "launcher" "clipboard"; }
-        Mod+Escape { spawn "noctalia-shell" "ipc" "call" "lockScreen" "lock"; }
-
-        // Overview
-        Mod+O repeat=false { toggle-overview; }
-
-        // Window management
-        Mod+Q { close-window; }
-
-        // Focus movement
-        Mod+Left  { focus-column-left; }
-        Mod+Down  { focus-window-down; }
-        Mod+Up    { focus-window-up; }
-        Mod+Right { focus-column-right; }
-        Mod+H     { focus-column-left; }
-        Mod+J     { focus-window-down; }
-        Mod+K     { focus-window-up; }
-        Mod+L     { focus-column-right; }
-        
-        // Mouse scroll navigation
-        Mod+WheelScrollDown  { focus-column-right; }
-        Mod+WheelScrollUp    { focus-column-left; }
-        Mod+WheelScrollRight { focus-column-right; }
-        Mod+WheelScrollLeft  { focus-column-left; }
-
-        // Move windows
-        Mod+Ctrl+Left  { move-column-left; }
-        Mod+Ctrl+Down  { move-window-down; }
-        Mod+Ctrl+Up    { move-window-up; }
-        Mod+Ctrl+Right { move-column-right; }
-        Mod+Ctrl+H     { move-column-left; }
-        Mod+Ctrl+J     { move-window-down; }
-        Mod+Ctrl+K     { move-window-up; }
-        Mod+Ctrl+L     { move-column-right; }
-
-        Mod+Home { focus-column-first; }
-        Mod+End  { focus-column-last; }
-        Mod+Ctrl+Home { move-column-to-first; }
-        Mod+Ctrl+End  { move-column-to-last; }
-
-        // Monitor focus
-        Mod+Shift+Left  { focus-monitor-left; }
-        Mod+Shift+Down  { focus-monitor-down; }
-        Mod+Shift+Up    { focus-monitor-up; }
-        Mod+Shift+Right { focus-monitor-right; }
-        Mod+Shift+H     { focus-monitor-left; }
-        Mod+Shift+J     { focus-monitor-down; }
-        Mod+Shift+K     { focus-monitor-up; }
-        Mod+Shift+L     { focus-monitor-right; }
-
-        // Move column to monitor
-        Mod+Shift+Ctrl+Left  { move-column-to-monitor-left; }
-        Mod+Shift+Ctrl+Down  { move-column-to-monitor-down; }
-        Mod+Shift+Ctrl+Up    { move-column-to-monitor-up; }
-        Mod+Shift+Ctrl+Right { move-column-to-monitor-right; }
-        Mod+Shift+Ctrl+H     { move-column-to-monitor-left; }
-        Mod+Shift+Ctrl+J     { move-column-to-monitor-down; }
-        Mod+Shift+Ctrl+K     { move-column-to-monitor-up; }
-        Mod+Shift+Ctrl+L     { move-column-to-monitor-right; }
-
-        // Workspace navigation
-        Mod+Page_Down { focus-workspace-down; }
-        Mod+Page_Up   { focus-workspace-up; }
-        Mod+U         { focus-workspace-down; }
-        Mod+I         { focus-workspace-up; }
-        Mod+Ctrl+Page_Down { move-column-to-workspace-down; }
-        Mod+Ctrl+Page_Up   { move-column-to-workspace-up; }
-        Mod+Ctrl+U         { move-column-to-workspace-down; }
-        Mod+Ctrl+I         { move-column-to-workspace-up; }
-
-        // Move entire workspace
-        Mod+Shift+Page_Down { move-workspace-down; }
-        Mod+Shift+Page_Up   { move-workspace-up; }
-
-        // Workspace by number
-        Mod+1 { focus-workspace 1; }
-        Mod+2 { focus-workspace 2; }
-        Mod+3 { focus-workspace 3; }
-        Mod+4 { focus-workspace 4; }
-        Mod+5 { focus-workspace 5; }
-        Mod+6 { focus-workspace 6; }
-        Mod+7 { focus-workspace 7; }
-        Mod+8 { focus-workspace 8; }
-        Mod+9 { focus-workspace 9; }
-        Mod+Shift+1 { move-column-to-workspace 1; }
-        Mod+Shift+2 { move-column-to-workspace 2; }
-        Mod+Shift+3 { move-column-to-workspace 3; }
-        Mod+Shift+4 { move-column-to-workspace 4; }
-        Mod+Shift+5 { move-column-to-workspace 5; }
-        Mod+Shift+6 { move-column-to-workspace 6; }
-        Mod+Shift+7 { move-column-to-workspace 7; }
-        Mod+Shift+8 { move-column-to-workspace 8; }
-        Mod+Shift+9 { move-column-to-workspace 9; }
-
-        // Column management
-        Mod+BracketLeft  { consume-or-expel-window-left; }
-        Mod+BracketRight { consume-or-expel-window-right; }
-        Mod+Comma  { consume-window-into-column; }
-
-        // Window sizing
-        Mod+R { switch-preset-column-width; }
-        Mod+Shift+R { switch-preset-window-height; }
-        Mod+Ctrl+R { reset-window-height; }
-        Mod+M { maximize-column; }
-        Mod+Shift+F { fullscreen-window; }
-        Mod+C { center-column; }
-        Mod+Minus { set-column-width "-10%"; }
-        Mod+Equal { set-column-width "+10%"; }
-        Mod+Shift+Minus { set-window-height "-10%"; }
-        Mod+Shift+Equal { set-window-height "+10%"; }
-
-        // Floating windows
-        Mod+Shift+Space { toggle-window-floating; }
-        Mod+Shift+V { switch-focus-between-floating-and-tiling; }
-
-        // Screenshots
-        Mod+S { screenshot; }
-        Print { screenshot; }
-        Ctrl+Print { screenshot-screen; }
-        Alt+Print { screenshot-window; }
-
-        // Media keys
-        XF86AudioRaiseVolume allow-when-locked=true { spawn-sh "wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.1+ -l 1.0"; }
-        XF86AudioLowerVolume allow-when-locked=true { spawn-sh "wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.1-"; }
-        XF86AudioMute        allow-when-locked=true { spawn-sh "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"; }
-        XF86AudioMicMute     allow-when-locked=true { spawn-sh "wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle"; }
-        XF86AudioPlay        allow-when-locked=true { spawn-sh "playerctl play-pause"; }
-        XF86AudioStop        allow-when-locked=true { spawn-sh "playerctl stop"; }
-        XF86AudioPrev        allow-when-locked=true { spawn-sh "playerctl previous"; }
-        XF86AudioNext        allow-when-locked=true { spawn-sh "playerctl next"; }
-
-        // Brightness keys
-        XF86MonBrightnessUp   allow-when-locked=true { spawn "brightnessctl" "--class=backlight" "set" "+10%"; }
-        XF86MonBrightnessDown allow-when-locked=true { spawn "brightnessctl" "--class=backlight" "set" "10%-"; }
-
-        // System
-        Mod+Shift+E { quit; }
-        Mod+Shift+P { power-off-monitors; }
-        Mod+Ctrl+Escape allow-inhibiting=false { toggle-keyboard-shortcuts-inhibit; }
-    }
-
-    debug {
-        // Allows notification actions and window activation from Noctalia
-        honor-xdg-activation-with-invalid-serial
-    }
-  '';
 
   # Additional programs to install
   home.packages = with pkgs; [
@@ -363,29 +31,8 @@
     gnome-calculator   # Calculator
     simple-scan        # Document scanner
 
-    # Wayland utilities
-    
-    # Screenshot tools
-    grim         # Screenshot utility for Wayland
-    slurp        # Screen area selection for Wayland
-    
-    # Noctilia Shell dependencies
-    brightnessctl     # Required: Brightness control
-    imagemagick       # Required: Template processing & wallpaper resizing
-    python3           # Required: Template processing
-    cliphist          # Optional: Clipboard history support
-    cava              # Optional: Audio visualizer
-    wlsunset          # Optional: Night light functionality
+    # Media utilities
     playerctl         # Media key support
-    
-    # GTK theming for Noctilia Shell
-    adw-gtk3          # Libadwaita theme for GTK3 apps
-    nwg-look          # GTK theme switcher and manager
-    
-    # Qt theming support
-    qt6Packages.qt6ct           # Qt6 configuration tool
-    libsForQt5.qt5ct            # Qt5 configuration tool
-    libsForQt5.qtstyleplugin-kvantum  # Kvantum Qt theme engine
     
     # Media
     mpv
@@ -432,27 +79,31 @@
     nerd-fonts.jetbrains-mono  # JetBrains Mono Nerd Font
   ];
 
-  # Session variables for Wayland and Electron apps
+  # Session variables for Electron apps on Wayland
   home.sessionVariables = {
-    # Wayland / XWayland behavior
     NIXOS_OZONE_WL = "1";
     ELECTRON_OZONE_PLATFORM_HINT = "auto";
     MOZ_ENABLE_WAYLAND = "1";
-    QT_QPA_PLATFORM = "wayland;xcb";
-    SDL_VIDEODRIVER = "wayland";
-    CLUTTER_BACKEND = "wayland";
-    
-    # Qt theming
-    QT_QPA_PLATFORMTHEME = "qt6ct";
   };
   
-  # GTK theming configuration for Noctilia Shell
+  # GTK theming - Fluent Dark (Windows 11 style)
   gtk = {
     enable = true;
     
     theme = {
-      name = "adw-gtk3-dark";
-      package = pkgs.adw-gtk3;
+      name = "Fluent-Dark";
+      package = pkgs.fluent-gtk-theme;
+    };
+    
+    iconTheme = {
+      name = "Fluent-dark";
+      package = pkgs.fluent-icon-theme;
+    };
+    
+    cursorTheme = {
+      name = "Bibata-Modern-Classic";
+      package = pkgs.bibata-cursors;
+      size = 24;
     };
     
     gtk3.extraConfig = {
@@ -497,7 +148,6 @@
       ll = "ls -la";
       update = "nixos-update";
       upgrade = "nixos-upgrade";
-      startniri = "niri-session";  # Quick alias to start Niri
     };
     bashrcExtra = ''
       # NixOS helpers (work across devices)
@@ -537,16 +187,8 @@
           sudo nixos-rebuild switch --no-reexec --option binary-caches-parallel-connections 40 --flake "$dir#${hostname}"
       }
     '';
-    # Auto-start Niri on TTY1 with guard variable to prevent infinite loop
-    profileExtra = ''
-      if [ -z "$DISPLAY" ] && [ "$(tty)" = "/dev/tty1" ] && [ -z "$NIRI_LOADED" ]; then
-        export NIRI_LOADED=1
-        exec niri-session
-      fi
-    '';
   };
 
-  # Add .desktop entries for autostarting Noctilia
   xdg = {
     enable = true;
   };
@@ -560,20 +202,269 @@
     videos = "${config.home.homeDirectory}/Videos";
   };
 
-  # Import Wayland environment variables into systemd user environment
-  # This fixes wlr portal not starting - systemd needs WAYLAND_DISPLAY
-  systemd.user.services.import-wayland-env = {
-    Unit = {
-      Description = "Import Wayland env vars into systemd user environment";
-      After = [ "graphical-session-pre.target" ];
-      PartOf = [ "graphical-session.target" ];
+  # ========================================================================
+  # GNOME Windows 11 Configuration
+  # Extensions + dconf settings to make GNOME look and feel like Windows 11
+  # ========================================================================
+
+  # Enable and configure GNOME extensions via dconf
+  dconf.settings = {
+    # Enable installed extensions
+    "org/gnome/shell" = {
+      enabled-extensions = [
+        "dash-to-panel@jderose9.github.com"
+        "arcmenu@arcmenu.com"
+        "blur-my-shell@auber.music"
+        "user-theme@gnome-shell-extensions.gcampax.github.com"
+        "just-perfection-desktop@just-perfection"
+        "appindicatorsupport@rgcjonas.gmail.com"
+        "rounded-window-corners@fxgn"
+        "clipboard-indicator@tudmotu.com"
+      ];
+      favorite-apps = [
+        "google-chrome.desktop"
+        "org.gnome.Nautilus.desktop"
+        "kitty.desktop"
+        "codium.desktop"
+        "org.telegram.desktop.desktop"
+      ];
     };
-    Service = {
-      Type = "oneshot";
-      ExecStart = "${pkgs.dbus}/bin/dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP XDG_SESSION_TYPE";
+
+    # --- Dash to Panel (Windows 11 taskbar) ---
+    "org/gnome/shell/extensions/dash-to-panel" = {
+      panel-positions = ''{"0":"BOTTOM","1":"BOTTOM"}'';
+      panel-sizes = ''{"0":44,"1":44}'';
+      panel-element-positions = ''{"0":[{"element":"showAppsButton","visible":false,"position":"stackedTL"},{"element":"activitiesButton","visible":false,"position":"stackedTL"},{"element":"leftBox","visible":true,"position":"stackedTL"},{"element":"taskbar","visible":true,"position":"centerMonitor"},{"element":"centerBox","visible":false,"position":"stackedBR"},{"element":"rightBox","visible":true,"position":"stackedBR"},{"element":"dateMenu","visible":true,"position":"stackedBR"},{"element":"systemMenu","visible":true,"position":"stackedBR"},{"element":"desktopButton","visible":true,"position":"stackedBR"}]}'';
+      appicon-margin = 4;
+      appicon-padding = 6;
+      dot-style-focused = "SOLID";
+      dot-style-unfocused = "DOTS";
+      dot-position = "BOTTOM";
+      animate-appicon-hover = true;
+      animate-appicon-hover-animation-type = "SIMPLE";
+      trans-use-custom-bg = true;
+      trans-bg-color = "#1a1a2e";
+      trans-use-custom-opacity = true;
+      trans-panel-opacity = 0.85;
+      show-tooltip = true;
+      show-favorites = true;
+      show-running-apps = true;
+      group-apps = true;
+      isolate-workspaces = false;
+      click-action = "CYCLE-MIN";
+      scroll-panel-action = "NOTHING";
+      hot-keys = true;
+      shortcut-text = "";
     };
-    Install = {
-      WantedBy = [ "graphical-session.target" ];
+
+    # --- ArcMenu (Windows 11 Start Menu) ---
+    "org/gnome/shell/extensions/arcmenu" = {
+      menu-button-appearance = "Icon";
+      menu-button-icon = "Custom_Icon";
+      custom-menu-button-icon = "${pkgs.fluent-icon-theme}/share/icons/Fluent-dark/scalable/places/start-here.svg";
+      custom-menu-button-icon-size = 28.0;
+      menu-layout = "Windows";
+      menu-width = 750;
+      menu-height = 650;
+      search-entry-border-radius = "(8, 8, 8, 8)";
+      enable-pinned-apps = true;
+      pinned-apps = [
+        "google-chrome.desktop"
+        "org.gnome.Nautilus.desktop"
+        "kitty.desktop"
+        "org.gnome.Settings.desktop"
+      ];
+    };
+
+    # --- Blur My Shell (Acrylic/Mica effect) ---
+    "org/gnome/shell/extensions/blur-my-shell" = {
+      brightness = 0.75;
+      sigma = 25;
+      noise-amount = 0.0;
+      color-and-noise = true;
+    };
+    "org/gnome/shell/extensions/blur-my-shell/panel" = {
+      blur = true;
+      brightness = 0.75;
+      sigma = 20;
+      override-background = true;
+      style-panel = 0;
+      override-background-dynamically = false;
+    };
+    "org/gnome/shell/extensions/blur-my-shell/overview" = {
+      blur = true;
+      style-components = 2;
+    };
+    "org/gnome/shell/extensions/blur-my-shell/dash-to-panel" = {
+      blur = true;
+      brightness = 0.75;
+      sigma = 20;
+      override-background = true;
+      style-dash-to-panel = 0;
+    };
+    "org/gnome/shell/extensions/blur-my-shell/lockscreen" = {
+      blur = true;
+      sigma = 30;
+    };
+
+    # --- Just Perfection (UI fine-tuning) ---
+    "org/gnome/shell/extensions/just-perfection" = {
+      activities-button = false;
+      app-menu = false;
+      search = true;
+      dash = false;
+      panel = true;
+      startup-status = 0;  # Desktop (not overview)
+      workspace-switcher-size = 0;
+      animation = 2;  # Faster animations
+      notification-banner-position = 2;  # Top right
+    };
+
+    # --- Rounded Window Corners ---
+    "org/gnome/shell/extensions/rounded-window-corners" = {
+      global-rounded-corner-settings = "{'padding': <{'left': <uint32 1>, 'right': <uint32 1>, 'top': <uint32 1>, 'bottom': <uint32 1>}>, 'keep_rounded_corners': <{'maximized': <false>, 'fullscreen': <false>}>, 'border_radius': <uint32 12>, 'smoothing': <uint32 0>}";
+      skip-libadwaita-app = false;
+      skip-libhandy-app = false;
+    };
+
+    # --- Clipboard Indicator ---
+    "org/gnome/shell/extensions/clipboard-indicator" = {
+      history-size = 50;
+      preview-size = 100;
+      move-item-first = true;
+      enable-keybindings = true;
+    };
+
+    # --- GNOME Desktop Settings (Windows 11 feel) ---
+    "org/gnome/desktop/interface" = {
+      color-scheme = "prefer-dark";
+      gtk-theme = "Fluent-Dark";
+      icon-theme = "Fluent-dark";
+      cursor-theme = "Bibata-Modern-Classic";
+      cursor-size = 24;
+      font-name = "Cantarell 11";
+      document-font-name = "Cantarell 11";
+      monospace-font-name = "JetBrainsMono Nerd Font 10";
+      font-antialiasing = "rgba";
+      font-hinting = "slight";
+      enable-animations = true;
+      clock-show-weekday = true;
+      clock-show-seconds = false;
+      show-battery-percentage = true;
+    };
+
+    # Window titlebar buttons (Windows 11: minimize, maximize, close on right)
+    "org/gnome/desktop/wm/preferences" = {
+      button-layout = ":minimize,maximize,close";
+      titlebar-font = "Cantarell Bold 11";
+      action-double-click-titlebar = "toggle-maximize";
+      action-middle-click-titlebar = "minimize";
+      focus-mode = "click";
+      num-workspaces = 4;
+    };
+
+    # Touchpad settings
+    "org/gnome/desktop/peripherals/touchpad" = {
+      tap-to-click = true;
+      natural-scroll = true;
+      two-finger-scrolling-enabled = true;
+    };
+
+    # Keyboard settings
+    "org/gnome/desktop/input-sources" = {
+      sources = [ (lib.hm.gvariant.mkTuple [ "xkb" "za" ]) ];
+    };
+
+    # Background / Wallpaper
+    "org/gnome/desktop/background" = {
+      picture-uri = "file:///home/${userConfig.username}/${userConfig.wallpaperDir}/Balcony-ja.png";
+      picture-uri-dark = "file:///home/${userConfig.username}/${userConfig.wallpaperDir}/Balcony-ja.png";
+      picture-options = "zoom";
+    };
+
+    # Lock screen wallpaper
+    "org/gnome/desktop/screensaver" = {
+      picture-uri = "file:///home/${userConfig.username}/${userConfig.wallpaperDir}/Balcony-ja.png";
+      picture-options = "zoom";
+      lock-delay = lib.hm.gvariant.mkUint32 30;
+    };
+
+    # Night light (replaces wlsunset)
+    "org/gnome/settings-daemon/plugins/color" = {
+      night-light-enabled = true;
+      night-light-schedule-automatic = true;
+      night-light-temperature = 3700;
+    };
+
+    # Power settings
+    "org/gnome/settings-daemon/plugins/power" = {
+      sleep-inactive-ac-type = "nothing";
+      sleep-inactive-battery-timeout = 900;
+    };
+
+    # File manager (Nautilus) settings
+    "org/gnome/nautilus/preferences" = {
+      default-folder-viewer = "list-view";
+      show-hidden-files = false;
+    };
+    "org/gnome/nautilus/list-view" = {
+      default-zoom-level = "small";
+    };
+
+    # Mutter (window manager) settings
+    "org/gnome/mutter" = {
+      edge-tiling = true;         # Windows-style snap to edges
+      dynamic-workspaces = false; # Fixed workspaces like Windows
+      center-new-windows = true;
+    };
+
+    # Keybindings (Windows 11 style)
+    "org/gnome/desktop/wm/keybindings" = {
+      close = [ "<Super>q" "<Alt>F4" ];
+      minimize = [ "<Super>h" ];
+      toggle-maximized = [ "<Super>Up" ];
+      show-desktop = [ "<Super>d" ];
+      switch-windows = [ "<Alt>Tab" ];
+      switch-windows-backward = [ "<Shift><Alt>Tab" ];
+      move-to-workspace-1 = [ "<Super><Shift>1" ];
+      move-to-workspace-2 = [ "<Super><Shift>2" ];
+      move-to-workspace-3 = [ "<Super><Shift>3" ];
+      move-to-workspace-4 = [ "<Super><Shift>4" ];
+      switch-to-workspace-1 = [ "<Super>1" ];
+      switch-to-workspace-2 = [ "<Super>2" ];
+      switch-to-workspace-3 = [ "<Super>3" ];
+      switch-to-workspace-4 = [ "<Super>4" ];
+    };
+
+    # Custom keybindings for app launchers
+    "org/gnome/settings-daemon/plugins/media-keys" = {
+      custom-keybindings = [
+        "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/"
+        "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1/"
+        "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom2/"
+        "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom3/"
+      ];
+      home = [ "<Super>e" ];  # Open file manager (Windows style)
+    };
+    "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0" = {
+      name = "Terminal";
+      command = "kitty";
+      binding = "<Super>t";
+    };
+    "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1" = {
+      name = "Browser";
+      command = "google-chrome-stable";
+      binding = "<Super>b";
+    };
+    "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom2" = {
+      name = "Windsurf";
+      command = "windsurf";
+      binding = "<Super>w";
+    };
+    "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom3" = {
+      name = "File Manager";
+      command = "nautilus";
+      binding = "<Super>f";
     };
   };
 

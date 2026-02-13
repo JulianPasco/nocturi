@@ -24,16 +24,12 @@ in {
   time.timeZone = userConfig.timezone;
   i18n.defaultLocale = userConfig.locale;
 
-  # Disable GNOME desktop environment and X11
-  # Using pure Wayland with Niri - no display manager needed
-  services.desktopManager.gnome.enable = false;
-  services.displayManager.gdm.enable = false;
-  services.xserver.enable = false;
+  # GNOME desktop and GDM are enabled in modules/system/gnome.nix
 
   # Configure console keymap for TTY login
   console.keyMap = "us";
 
-  # XDG Portal configuration moved to modules/system/niri.nix to avoid conflicts
+  # XDG Portal configuration moved to modules/system/gnome.nix
   
   # Security and authentication services
   security.polkit.enable = true;
@@ -54,7 +50,7 @@ in {
     };
   };
   
-  # Calendar events support for Noctilia Shell
+  # Calendar events support
   services.gnome.evolution-data-server.enable = true;
 
   # Enable printing support
@@ -127,7 +123,7 @@ in {
     # Wayland utilities
     wl-clipboard
     
-    # For Noctilia functionality
+    # General utilities
     jq
     colordiff
   ];
@@ -167,14 +163,8 @@ in {
     # Logging
     log-lines = 200;                # More context in build logs
     
-    # Additional binary cache for niri (beyond nix-fast.nix defaults)
-    substituters = [
-      "https://niri.cachix.org"      # Niri binary cache for faster window manager builds
-    ];
-    
-    trusted-public-keys = [
-      "niri.cachix.org-1:Wv0OmO7PsuocRKzfDoJ3mulSl7Z6oezYhGhR+3W2964="
-    ];
+    substituters = [];
+    trusted-public-keys = [];
     
     # Remote builder optimization
     builders-use-substitutes = true;  # Let builders use binary caches
