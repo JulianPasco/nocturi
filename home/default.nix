@@ -315,7 +315,7 @@
 
     # --- Just Perfection (UI fine-tuning) ---
     "org/gnome/shell/extensions/just-perfection" = {
-      activities-button = false;
+      activities-button = true;
       app-menu = false;
       search = true;
       dash = false;
@@ -323,11 +323,13 @@
       startup-status = 0;  # Desktop (not overview)
       workspace-switcher-size = 0;
       animation = 2;  # Faster animations
-      notification-banner-position = 2;  # Top right
+      notification-banner-position = 1;  # Center
       hot-corner = false;  # Disable hot corners (not Win11 behavior)
       ripple-box = false;  # Disable click ripple
-      window-demands-attention-focus = true;  # Focus windows that demand attention
-      overlay-key = false;  # Let ArcMenu handle Super key
+      window-demands-attention-focus = false;
+      overlay-key = true;
+      double-super-to-appgrid = true;
+      window-maximized-on-create = true;
     };
 
     # --- Rounded Window Corners ---
