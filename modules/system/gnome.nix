@@ -4,7 +4,7 @@
 {
   # Enable GNOME Desktop Environment
   services.xserver.enable = true;
-  services.xserver.displayManager.gdm.enable = true;
+  services.displayManager.gdm.enable = true;
   services.desktopManager.gnome.enable = true;
 
   # Enable polkit for authentication dialogs
@@ -24,6 +24,12 @@
     yelp            # Help viewer
     gnome-characters
     totem           # Video player (we use mpv)
+    gnome-software  # Software center (we use nix)
+    gnome-console   # Terminal (we use kitty)
+    gnome-text-editor # Text editor (we use gedit/vscode)
+    gnome-logs      # Log viewer
+    snapshot        # Camera app
+    gnome-system-monitor # System monitor (we use htop/btop)
     tali
     iagno
     hitori
@@ -43,6 +49,10 @@
     swell-foop
     quadrapassel
   ];
+
+  # Disable GNOME file indexing (major performance drain)
+  services.gnome.localsearch.enable = false;
+  services.gnome.tinysparql.enable = false;
 
   # GNOME Shell extensions (system-level for availability)
   environment.systemPackages = with pkgs; [
@@ -88,5 +98,10 @@
   xdg.portal = {
     enable = true;
     xdgOpenUsePortal = true;
+  };
+
+  # Disable GNOME Software auto-start and background updates
+  environment.sessionVariables = {
+    GNOME_SOFTWARE_AUTOSTART = "false";
   };
 }

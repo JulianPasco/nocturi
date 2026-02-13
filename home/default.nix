@@ -259,20 +259,34 @@
 
     # --- ArcMenu (Windows 11 Start Menu) ---
     "org/gnome/shell/extensions/arcmenu" = {
+      # Panel button: Windows 11 start icon
       menu-button-appearance = "Icon";
       menu-button-icon = "Custom_Icon";
-      custom-menu-button-icon = "${pkgs.fluent-icon-theme}/share/icons/Fluent-dark/scalable/places/start-here.svg";
-      custom-menu-button-icon-size = 28.0;
-      menu-layout = "Windows";
+      custom-menu-button-icon = "/home/${userConfig.username}/nixos-config/assets/windows11-start.svg";
+      custom-menu-button-icon-size = 36.0;
+      # Main menu: Windows 11 "Eleven" layout (click on icon)
+      menu-layout = "Eleven";
       menu-width = 750;
       menu-height = 650;
       search-entry-border-radius = "(8, 8, 8, 8)";
-      enable-pinned-apps = true;
-      pinned-apps = [
-        "google-chrome.desktop"
-        "org.gnome.Nautilus.desktop"
-        "kitty.desktop"
-        "org.gnome.Settings.desktop"
+      eleven-extra-buttons = [
+        (lib.hm.gvariant.mkTuple [ "Settings" "org.gnome.Settings" ])
+        (lib.hm.gvariant.mkTuple [ "Files" "org.gnome.Nautilus" ])
+      ];
+      # Standalone Runner: opens on Super key press
+      enable-standlone-runner-menu = true;
+      runner-menu-hotkey = "Super_L";
+      runner-position = 0;  # Top centered
+      runner-show-frequent-apps = true;
+      runner-search-display-style = "List";
+      # Pinned apps in Eleven layout
+      pinned-app-list = [
+        "Google Chrome" "" "google-chrome.desktop"
+        "Files" "" "org.gnome.Nautilus.desktop"
+        "Terminal" "" "kitty.desktop"
+        "Windsurf" "" "windsurf.desktop"
+        "Settings" "" "org.gnome.Settings.desktop"
+        "Telegram" "" "org.telegram.desktop.desktop"
       ];
     };
 
@@ -318,6 +332,10 @@
       workspace-switcher-size = 0;
       animation = 2;  # Faster animations
       notification-banner-position = 2;  # Top right
+      hot-corner = false;  # Disable hot corners (not Win11 behavior)
+      ripple-box = false;  # Disable click ripple
+      window-demands-attention-focus = true;  # Focus windows that demand attention
+      overlay-key = false;  # Let ArcMenu handle Super key
     };
 
     # --- Rounded Window Corners ---
@@ -351,6 +369,7 @@
       clock-show-weekday = true;
       clock-show-seconds = false;
       show-battery-percentage = true;
+      text-scaling-factor = 1.25;  # 125% zoom
     };
 
     # Window titlebar buttons (Windows 11: minimize, maximize, close on right)
@@ -416,6 +435,7 @@
       edge-tiling = true;         # Windows-style snap to edges
       dynamic-workspaces = false; # Fixed workspaces like Windows
       center-new-windows = true;
+      experimental-features = [ "scale-monitor-framebuffer" ];  # Fractional scaling support
     };
 
     # Keybindings (Windows 11 style)
@@ -434,6 +454,19 @@
       switch-to-workspace-2 = [ "<Super>2" ];
       switch-to-workspace-3 = [ "<Super>3" ];
       switch-to-workspace-4 = [ "<Super>4" ];
+    };
+
+    # Disable GNOME search providers for better performance
+    "org/gnome/desktop/search-providers" = {
+      disable-external = true;  # No external search providers
+      disabled = [
+        "org.gnome.Calculator.desktop"
+        "org.gnome.Characters.desktop"
+        "org.gnome.Contacts.desktop"
+        "org.gnome.clocks.desktop"
+        "org.gnome.Weather.desktop"
+        "org.gnome.Software.desktop"
+      ];
     };
 
     # Custom keybindings for app launchers
