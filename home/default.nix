@@ -235,24 +235,34 @@
 
     # --- Dash to Panel (Windows 11 taskbar) ---
     "org/gnome/shell/extensions/dash-to-panel" = {
-      panel-positions = ''{"0":"BOTTOM","1":"BOTTOM"}'';
-      panel-sizes = ''{"0":44,"1":44}'';
-      panel-element-positions = ''{"0":[{"element":"showAppsButton","visible":true,"position":"stackedTL"},{"element":"activitiesButton","visible":false,"position":"stackedTL"},{"element":"leftBox","visible":false,"position":"stackedTL"},{"element":"taskbar","visible":true,"position":"centerMonitor"},{"element":"centerBox","visible":false,"position":"stackedBR"},{"element":"rightBox","visible":true,"position":"stackedBR"},{"element":"dateMenu","visible":false,"position":"stackedBR"},{"element":"systemMenu","visible":false,"position":"stackedBR"},{"element":"desktopButton","visible":true,"position":"stackedBR"}]}'';
+      panel-anchors = ''{"BOE-0x00000000":"MIDDLE"}'';
+      panel-element-positions = ''{"BOE-0x00000000":[{"element":"showAppsButton","visible":true,"position":"stackedBR"},{"element":"activitiesButton","visible":false,"position":"stackedTL"},{"element":"leftBox","visible":false,"position":"stackedTL"},{"element":"taskbar","visible":true,"position":"centerMonitor"},{"element":"centerBox","visible":false,"position":"stackedBR"},{"element":"rightBox","visible":true,"position":"stackedBR"},{"element":"dateMenu","visible":false,"position":"stackedBR"},{"element":"systemMenu","visible":false,"position":"stackedBR"},{"element":"desktopButton","visible":true,"position":"stackedBR"}]}'';
+      panel-positions = ''{"1":"BOTTOM","BOE-0x00000000":"BOTTOM"}'';
+      panel-sizes = ''{"1":44,"BOE-0x00000000":48}'';
+      panel-top-bottom-margins = 0;
+      panel-top-bottom-padding = 2;
       show-apps-icon-file = "/home/${userConfig.username}/nixos-config/assets/windows11-start.svg";
       show-apps-icon-padding = 6;
-      show-apps-icon-side-padding = 4;
-      appicon-margin = 6;
-      appicon-padding = 8;
+      show-apps-icon-side-padding = 0;
+      appicon-margin = 0;
+      appicon-padding = 6;
+      appicon-style = "NORMAL";
       dot-style-focused = "SOLID";
       dot-style-unfocused = "DOTS";
       dot-position = "BOTTOM";
       animate-app-switch = true;
       animate-appicon-hover = true;
+      animate-appicon-hover-animation-extent = "{'RIPPLE': 4, 'PLANK': 4, 'SIMPLE': 1}";
+      animate-appicon-hover-animation-travel = "{'SIMPLE': 0.10000000000000001, 'RIPPLE': 0.40000000000000002, 'PLANK': 0.0}";
       animate-appicon-hover-animation-type = "SIMPLE";
+      global-border-radius = 1;
+      highlight-appicon-hover-border-radius = 2;
       trans-use-custom-bg = true;
       trans-bg-color = "#000000";
       trans-use-custom-opacity = true;
       trans-panel-opacity = 0.92;
+      trans-use-border = true;
+      trans-use-dynamic-opacity = false;
       show-tooltip = true;
       show-favorites = true;
       show-running-apps = true;
@@ -261,10 +271,14 @@
       click-action = "CYCLE-MIN";
       scroll-panel-action = "CYCLE_WINDOWS";
       hot-keys = true;
+      hotkeys-overlay-combo = "TEMPORARILY";
       shortcut-text = "";
       stockgs-keep-top-panel = true;  # Keep GNOME top panel visible (for Vitals + clock)
       stockgs-keep-dash = false;
+      stockgs-force-hotcorner = false;
+      stockgs-panelbtn-click-only = false;
       show-clock = false;  # Hide clock from bottom panel (keep in top panel only)
+      window-preview-title-position = "TOP";
     };
 
     # --- ArcMenu (Runner only - triggered by Super key) ---
