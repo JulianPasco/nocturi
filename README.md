@@ -1,33 +1,32 @@
-# GNOME Windows 11 + NixOS
+# COSMIC Desktop + NixOS
 
-**A modern NixOS desktop configuration with GNOME styled to look and feel like Windows 11.**
+**A modern NixOS desktop configuration with the COSMIC desktop environment.**
 
 [![NixOS](https://img.shields.io/badge/NixOS-Unstable-blue.svg)](https://nixos.org/)
-[![GNOME](https://img.shields.io/badge/Desktop-GNOME-4A86CF.svg)](https://www.gnome.org/)
-[![Windows 11 Style](https://img.shields.io/badge/Theme-Windows%2011-0078D4.svg)](#)
+[![COSMIC](https://img.shields.io/badge/Desktop-COSMIC-orange.svg)](https://github.com/pop-os/cosmic-epoch)
+[![Rust](https://img.shields.io/badge/Built%20with-Rust-orange.svg)](https://www.rust-lang.org/)
 
 ## ✨ Features
 
-- **🎨 Windows 11 Look**: Fluent theme, bottom taskbar, Start menu, blur effects
-- **🪟 GNOME Desktop**: Full-featured desktop environment with GDM
-- **⚡ Blazing Fast**: zram swap, tmpfs caching, optimized VM settings
-- ** Reproducible**: NixOS flakes ensure identical setups across machines
+- **🚀 COSMIC Desktop**: Modern Rust-based desktop built by System76
+- **⚡ Blazing Fast**: Native Wayland, GPU-accelerated, zram swap, optimized VM settings
+- **🔧 Reproducible**: NixOS flakes ensure identical setups across machines
 - **🧩 DRY Architecture**: Shared base config, host-specific overrides only
-- **⚙️ Easy Customization**: Single `user-config.nix` file for personal settings
+- **⚙️ Persistent Settings**: COSMIC configuration managed declaratively
+- **🎨 Customizable**: Easy theme and appearance configuration
 
 ## 🎥 What You Get
 
-### Windows 11 Style GNOME
-- Bottom taskbar with centered app icons (Dash to Panel)
-- Windows 11 Start Menu with search and pinned apps (ArcMenu)
-- Acrylic/Mica blur effects on panel and overview (Blur My Shell)
-- Rounded window corners (12px radius)
-- Fluent-Dark GTK theme + Fluent icon theme + Bibata cursor
-- Dark mode throughout, night light enabled
-- Minimize/Maximize/Close buttons on the right
-- Edge tiling (snap windows to edges)
-- System tray with app indicators
-- Clipboard history (like Win+V)
+### COSMIC Desktop Environment
+- **Modern UI**: Clean, responsive interface built in Rust
+- **Wayland-native**: Smooth animations and GPU acceleration
+- **Tiling & Floating**: Automatic tiling with manual override
+- **Panel & Dock**: Customizable panel and application dock
+- **App Library**: Application launcher with search
+- **Workspaces**: Multiple workspace support
+- **Dark Theme**: Beautiful dark theme with customizable accents
+- **Bibata Cursors**: Modern cursor theme
+- **Settings Persistence**: Your customizations are saved in git
 
 ### Performance Optimizations
 - **zram**: 30% RAM compressed swap
@@ -144,25 +143,23 @@ sudo nixos-rebuild switch --flake ~/nixos-config#home
 sudo reboot
 ```
 
-✅ **Done!** After reboot, GDM will greet you with a login screen. Log in and enjoy your Windows 11-style GNOME desktop.
+✅ **Done!** After reboot, COSMIC Greeter will greet you with a login screen. Log in and enjoy your COSMIC desktop.
 
 ## ⌨️ Keybindings
 
 | Key | Action |
 |-----|--------|
-| `Super+T` | Terminal (Kitty) |
+| `Super` / `Super+/` | Open App Library |
+| `Super+T` | Terminal |
 | `Super+B` | Browser (Google Chrome) |
-| `Super+W` | Windsurf |
-| `Super+E` | File Manager (Nautilus) |
-| `Super+F` | File Manager (Nautilus) |
-| `Super+D` | Show Desktop |
-| `Super+Q` / `Alt+F4` | Close window |
+| `Super+E` | File Manager |
+| `Super+Q` | Close window |
 | `Alt+Tab` | Switch windows |
-| `Super+Up` | Toggle maximize |
-| `Super+1-4` | Switch workspace |
-| `Super+Shift+1-4` | Move window to workspace |
+| `Super+Arrow` | Tile window to edge |
+| `Super+1-9` | Switch workspace |
+| `Super+Shift+1-9` | Move window to workspace |
 
-See `home/default.nix` for complete list.
+COSMIC uses intuitive keybindings. Customize them in Settings → Keyboard → Shortcuts.
 
 ## 📂 Structure
 
@@ -171,11 +168,13 @@ See `home/default.nix` for complete list.
 ├── user-config.nix              # ⭐ YOUR PERSONAL SETTINGS (edit this!)
 ├── modules/
 │   ├── base/                    # Shared config for all hosts
-│   └── system/                  # GNOME desktop + extensions
+│   └── system/                  # COSMIC desktop configuration
 ├── hosts/
 │   ├── home/                    # Laptop config (bluetooth, battery)
 │   └── work/                    # Desktop config
-└── home/                        # User packages, GNOME dconf settings
+└── home/
+    ├── default.nix              # User packages and settings
+    └── cosmic-config/           # COSMIC desktop settings (persistent)
 ```
 
 ### Configuration Points
@@ -186,31 +185,55 @@ See `home/default.nix` for complete list.
 
 **Host-specific**: `hosts/{hostname}/configuration.nix` (overrides for single machine)
 
-**GNOME system config**: `modules/system/gnome.nix` (extensions, themes, excluded packages)
+**COSMIC system config**: `modules/system/cosmic.nix` (desktop environment, portals, services)
 
-**User apps + GNOME dconf**: `home/default.nix` (packages, Win11 dconf settings, keybindings)
+**User apps + settings**: `home/default.nix` (packages, GTK theming)
+
+**COSMIC desktop settings**: `home/cosmic-config/cosmic/` (theme, panel, dock, window management)
 
 ## 🎨 Customization
 
-### Change Theme
-Edit `home/default.nix` GTK section and dconf `org/gnome/desktop/interface`:
+### Change COSMIC Settings
+
+**Method 1: Use COSMIC Settings App (Recommended)**
+1. Open COSMIC Settings from the app library
+2. Customize appearance, panel, dock, behavior, etc.
+3. Copy updated config to repository:
+   ```bash
+   cp -r ~/.config/cosmic ~/nixos-config/home/cosmic-config/
+   ```
+4. Commit changes:
+   ```bash
+   cd ~/nixos-config
+   git add home/cosmic-config/
+   git commit -m "Update COSMIC settings"
+   ```
+
+**Method 2: Edit Config Files Directly**
+
+COSMIC uses RON (Rusty Object Notation) files in `home/cosmic-config/cosmic/`. Edit these manually if you prefer.
+
+### Change GTK Theme
+
+Edit `home/default.nix` GTK section:
 ```nix
-gtk.theme.name = "Fluent-Dark";  # Change GTK theme
+gtk = {
+  enable = true;
+  cursorTheme = {
+    name = "Bibata-Modern-Classic";
+    package = pkgs.bibata-cursors;
+  };
+};
 ```
 
-### Change Wallpapers
-Edit the wallpaper paths in `home/default.nix` under `org/gnome/desktop/background`.
-
 ### Add Packages
+
 Edit `home/default.nix` and add to `home.packages`:
 ```nix
 home.packages = with pkgs; [
   your-package-here
 ];
 ```
-
-### Add/Remove GNOME Extensions
-Edit `modules/system/gnome.nix` to install extensions, then enable them in `home/default.nix` under `dconf.settings."org/gnome/shell".enabled-extensions`.
 
 ## 🚀 Adding Another Machine
 
@@ -282,17 +305,17 @@ Or select a previous generation from the boot menu.
 
 ## 🔧 Features
 
-- ✅ GNOME desktop with GDM display manager
-- ✅ Windows 11-style UI (taskbar, start menu, blur, rounded corners)
-- ✅ Wayland-native with XDG portals
+- ✅ COSMIC desktop with COSMIC Greeter
+- ✅ Wayland-native compositor with XDG portals
 - ✅ PipeWire audio
+- ✅ Persistent COSMIC settings (version controlled)
 - ✅ Power management (battery, power profiles)
 - ✅ Bluetooth support (on laptop)
-- ✅ Night light (automatic color temperature)
 - ✅ Tailscale VPN
-- ✅ Firefox with Wayland
+- ✅ GPU-accelerated rendering
 - ✅ Automatic Nix store optimization
 - ✅ Weekly garbage collection
+- ✅ Built-in COSMIC apps (Files, Terminal, Settings, etc.)
 
 ## 🤝 Contributing
 
@@ -304,11 +327,10 @@ MIT License - feel free to use and modify.
 
 ## 🙏 Credits
 
-- [GNOME](https://www.gnome.org/) - Desktop environment
-- [Dash to Panel](https://extensions.gnome.org/extension/1160/dash-to-panel/) - Windows-style taskbar
-- [ArcMenu](https://extensions.gnome.org/extension/3628/arcmenu/) - Windows 11 start menu
-- [Fluent GTK Theme](https://github.com/vinceliuice/Fluent-gtk-theme) - Windows 11-style theme
+- [COSMIC Desktop](https://github.com/pop-os/cosmic-epoch) - Modern Rust-based desktop environment by System76
 - [NixOS](https://nixos.org/) - Declarative Linux distribution
+- [nixos-cosmic community](https://github.com/lilyinstarlight/nixos-cosmic) - COSMIC integration for NixOS
+- [Bibata Cursors](https://github.com/ful1e5/Bibata_Cursor) - Modern cursor theme
 
 ---
 
