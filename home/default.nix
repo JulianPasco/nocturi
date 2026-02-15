@@ -1,5 +1,5 @@
 # Home Manager configuration
-{ config, lib, pkgs, pkgs-unstable, inputs, hostname, userConfig, ... }:
+{ config, lib, pkgs, inputs, hostname, userConfig, ... }:
 
 {
   # Home Manager basic configuration
@@ -17,7 +17,7 @@
     
     # Development tools
     vscode
-    pkgs-unstable.windsurf  # Use unstable for latest version
+    windsurf  # From nixpkgs unstable
     gh  # GitHub CLI
     gedit  #text editor
 
