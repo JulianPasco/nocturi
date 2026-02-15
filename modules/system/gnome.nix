@@ -32,10 +32,10 @@
     gnome-text-editor # Text editor (we use gedit/vscode)
     gnome-logs      # Log viewer
     snapshot        # Camera app
-    gnome-system-monitor # System monitor (we use htop/btop)
+    # gnome-system-monitor # System monitor (keep: Shell uses it for system info)
     gnome-calendar       # Calendar (we don't use)
     evolution            # Email client (we don't use)
-    evolution-data-server # Calendar/contacts backend (heavy service)
+    # evolution-data-server # Calendar/contacts backend (heavy service)
     tali
     iagno
     hitori
@@ -57,11 +57,14 @@
   ];
 
   # Disable GNOME file indexing (major performance drain)
-  services.gnome.localsearch.enable = false;
-  services.gnome.tinysparql.enable = false;
+  # services.gnome.localsearch.enable = false;
+  # services.gnome.tinysparql.enable = false;
 
   # GNOME Shell extensions (system-level for availability)
   environment.systemPackages = with pkgs; [
+    # Core GNOME utilities (needed by Shell/quick settings)
+    gnome-system-monitor  # System info in quick settings
+    
     # Wayland essentials
     wayland
     xdg-utils
@@ -77,17 +80,17 @@
     fluent-gtk-theme        # Windows 11-style GTK theme
     fluent-icon-theme       # Windows 11-style icon theme
     bibata-cursors          # Modern cursor theme
-
-    # GNOME Shell extensions for Windows 11 look
-    gnomeExtensions.dash-to-panel          # Windows-style taskbar
-    gnomeExtensions.arcmenu                # Windows 11 start menu
-    gnomeExtensions.blur-my-shell          # Blur effects (acrylic/mica)
-    gnomeExtensions.user-themes            # Custom shell themes
-    gnomeExtensions.just-perfection        # Fine-tune shell appearance
-    gnomeExtensions.appindicator           # System tray icons
-    gnomeExtensions.rounded-window-corners-reborn  # Rounded corners like Win11
-    gnomeExtensions.clipboard-indicator    # Clipboard manager (Win+V)
-    gnomeExtensions.vitals                 # System resources (CPU, RAM, temp, net)
+    
+    # GNOME Shell Extensions (Windows 11 look - must be in systemPackages for GNOME to find them)
+    gnomeExtensions.dash-to-panel
+    gnomeExtensions.arcmenu
+    gnomeExtensions.blur-my-shell
+    gnomeExtensions.user-themes
+    gnomeExtensions.just-perfection
+    gnomeExtensions.appindicator
+    gnomeExtensions.rounded-window-corners-reborn
+    gnomeExtensions.clipboard-indicator
+    gnomeExtensions.vitals
   ];
 
   # Ensure necessary services are enabled
@@ -102,17 +105,26 @@
   # Desktop portals (GNOME handles this automatically, but ensure it's enabled)
   xdg.portal = {
     enable = true;
-    xdgOpenUsePortal = true;
+    extraPortals = [ pkgs.xdg-desktop-portal-gnome ];
+    config.common.default = "gnome";
   };
+  
+  # Disable accessibility services (Orca screen reader forces speechd)
+  services.gnome.gnome-remote-desktop.enable = false;
+  services.gnome.gnome-user-share.enable = false;
+  services.gnome.rygel.enable = false;
+  programs.gnome-terminal.enable = false;
+  
+  # Disable speech-dispatcher and Orca (common cause of app launch lag/hangs)
+  services.speechd.enable = lib.mkForce false;
+  services.orca.enable = lib.mkForce false;
 
   # Performance and auto-start optimizations
   environment.sessionVariables = {
     GNOME_SOFTWARE_AUTOSTART = "false";
-    MUTTER_DEBUG_ENABLE_ATOMIC_KMS = "1";  # Better frame pacing
-    MUTTER_DEBUG_FORCE_KMS_MODE = "simple"; # Reduce compositor overhead
   };
 
   # Disable evolution-data-server (heavy background service)
-  services.gnome.evolution-data-server.enable = lib.mkForce false;
-  services.gnome.gnome-online-accounts.enable = lib.mkForce false;
+  # services.gnome.evolution-data-server.enable = lib.mkForce false;
+  # services.gnome.gnome-online-accounts.enable = lib.mkForce false;
 }

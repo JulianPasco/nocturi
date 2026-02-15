@@ -16,9 +16,17 @@ in {
   # Bootloader configuration (common for all UEFI systems)
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
+  
+  # Intel graphics optimizations for UHD 620 (Whiskey Lake)
+  boot.kernelParams = [
+    "i915.fastboot=1"           # Faster boot with display state preservation
+    "i915.enable_fbc=1"         # Framebuffer compression (power + performance)
+    "i915.enable_psr=2"         # Panel Self Refresh for power savings
+  ];
 
   # Networking (hostname set per-host)
   networking.networkmanager.enable = true;
+  systemd.services.NetworkManager-wait-online.enable = false;
 
   # Time zone and locale
   time.timeZone = userConfig.timezone;
@@ -34,21 +42,6 @@ in {
   # Security and authentication services
   security.polkit.enable = true;
   services.gnome.gnome-keyring.enable = true;  # Secret service for passwords
-  
-  # Enable polkit authentication agent (graphical permission dialogs)
-  systemd.user.services.polkit-gnome-authentication-agent-1 = {
-    description = "polkit-gnome-authentication-agent-1";
-    wantedBy = [ "graphical-session.target" ];
-    wants = [ "graphical-session.target" ];
-    after = [ "graphical-session.target" ];
-    serviceConfig = {
-      Type = "simple";
-      ExecStart = "${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1";
-      Restart = "on-failure";
-      RestartSec = 1;
-      TimeoutStopSec = 10;
-    };
-  };
   
   # Calendar events support
   services.gnome.evolution-data-server.enable = true;
@@ -109,6 +102,11 @@ in {
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
 
+  # Hardware firmware and SSD optimization
+  hardware.enableRedistributableFirmware = true;
+  services.fstrim.enable = true;
+  services.fwupd.enable = true;
+
   # System-wide packages (common utilities)
   environment.systemPackages = with pkgs; [
     # CLI utilities
@@ -119,6 +117,8 @@ in {
     wget
     vim
     usbutils
+    pciutils
+    lshw
     
     # Wayland utilities
     wl-clipboard
@@ -142,7 +142,21 @@ in {
   hardware.graphics = {
     enable = true;
     enable32Bit = true;  # For 32-bit apps and games
+    extraPackages = with pkgs; [
+      intel-media-driver  # LIBVA_DRIVER_NAME=iHD (modern)
+      intel-vaapi-driver  # LIBVA_DRIVER_NAME=i965 (legacy)
+      libvdpau-va-gl
+    ];
   };
+  
+  # Force Intel iHD driver for hardware acceleration (better for UHD 620)
+  environment.sessionVariables = {
+    LIBVA_DRIVER_NAME = "iHD";
+  };
+  
+  # CPU power management for responsiveness (Intel i7-8565U)
+  powerManagement.cpuFreqGovernor = "schedutil";  # Better than ondemand for interactive workloads
+  services.thermald.enable = true;  # Intel thermal management
   
   # DBus services
   services.dbus = {

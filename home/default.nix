@@ -67,9 +67,9 @@
     bitwarden-cli
     
     # Remote Desktop
-    # rustdesk  # Commented out: takes 30+ min to compile, add back later if needed
+    # rustdesk  # Commented out: takes 30+ min to compile
     anydesk
-    deskflow  # KVM software (Synergy fork)
+    # deskflow  # Removed: potential bloat/input interference
     
     # File Transfer & Development
     filezilla
@@ -82,9 +82,9 @@
 
   # Session variables for Electron apps on Wayland
   home.sessionVariables = {
-    NIXOS_OZONE_WL = "1";
-    ELECTRON_OZONE_PLATFORM_HINT = "auto";
-    MOZ_ENABLE_WAYLAND = "1";
+    # NIXOS_OZONE_WL = "1";
+    # ELECTRON_OZONE_PLATFORM_HINT = "auto";
+    # MOZ_ENABLE_WAYLAND = "1";
   };
   
   # GTK theming - Fluent Dark (Windows 11 style)
@@ -210,6 +210,11 @@
 
   # Enable and configure GNOME extensions via dconf
   dconf.settings = {
+    # Disable GNOME Settings Daemon plugins that timeout on missing services
+    "org/gnome/settings-daemon/plugins/usb-protection" = {
+      active = false;  # Tries to reach USBGuard (not installed), causes DBus timeouts
+    };
+    
     # Enable installed extensions
     "org/gnome/shell" = {
       enabled-extensions = [
@@ -338,7 +343,7 @@
       panel = true;
       startup-status = 0;  # Desktop (not overview)
       workspace-switcher-size = 0;
-      animation = 2;  # Faster animations
+      animation = 3;  # Fastest animations (reduced from 2)
       notification-banner-position = 1;  # Center
       hot-corner = true;  # Disable hot corners (not Win11 behavior)
       ripple-box = false;  # Disable click ripple
@@ -468,7 +473,7 @@
       edge-tiling = true;         # Windows-style snap to edges
       dynamic-workspaces = false; # Fixed workspaces like Windows
       center-new-windows = true;
-      experimental-features = [ "scale-monitor-framebuffer" ];  # Fractional scaling support
+      # experimental-features = [ "scale-monitor-framebuffer" ];  # Disabled: can cause lag on Intel iGPU
     };
 
     # Keybindings (Windows 11 style)
