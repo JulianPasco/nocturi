@@ -2,8 +2,11 @@
   description = "NixOS configuration with COSMIC Desktop";
 
   inputs = {
-    # NixOS unstable packages
-    nixpkgs.url = "github:nixos/nixpkgs/c5296fdd05cfa2c187990dd909864da9658df755";
+    # Use nixpkgs from nixos-cosmic for best COSMIC compatibility
+    nixpkgs.follows = "nixos-cosmic/nixpkgs";
+    
+    # COSMIC Desktop flake (latest version with binary cache)
+    nixos-cosmic.url = "github:lilyinstarlight/nixos-cosmic";
     
     # Latest packages from unstable (for Windsurf)
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
@@ -15,7 +18,7 @@
     };
   };
 
-  outputs = inputs@{ self, nixpkgs, nixpkgs-unstable, home-manager, ... }:
+  outputs = inputs@{ self, nixpkgs, nixpkgs-unstable, nixos-cosmic, home-manager, ... }:
     let
       system = "x86_64-linux";
       pkgs = nixpkgs.legacyPackages.${system};
@@ -32,6 +35,14 @@
         inherit system;
         specialArgs = { inherit inputs hostname userConfig pkgs-unstable; };
         modules = [
+          # Binary cache for COSMIC (prevents 30+ min builds)
+          {
+            nix.settings = {
+              substituters = [ "https://cosmic.cachix.org/" ];
+              trusted-public-keys = [ "cosmic.cachix.org-1:Dya9IyXD4xdBehWjrkPv6rtxpmMdRel02smYzA85dPE=" ];
+            };
+          }
+          nixos-cosmic.nixosModules.default
           ./hosts/${hostname}/configuration.nix
           ./modules/system/cosmic.nix
           home-manager.nixosModules.home-manager
