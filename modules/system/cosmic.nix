@@ -6,29 +6,16 @@
   services.desktopManager.cosmic.enable = true;
   services.displayManager.cosmic-greeter.enable = true;
 
-  # Enable X11 support for compatibility
+  # Enable X11 support for compatibility with legacy apps
   services.xserver.enable = true;
-
-  # Enable polkit for authentication dialogs
-  security.polkit.enable = true;
 
   # System packages for COSMIC
   environment.systemPackages = with pkgs; [
-    # Wayland essentials
-    wayland
-    xdg-utils
+    # Wayland clipboard
     wl-clipboard
-
-    # Authentication
-    polkit_gnome
 
     # Theming
     bibata-cursors          # Modern cursor theme
-    
-    # COSMIC utilities (if available separately)
-    # cosmic-term
-    # cosmic-files
-    # cosmic-edit
   ];
 
   # Ensure necessary services are enabled
@@ -46,14 +33,4 @@
     extraPortals = [ pkgs.xdg-desktop-portal-cosmic ];
     config.common.default = "cosmic";
   };
-
-  # DBus services
-  services.dbus = {
-    enable = true;
-    packages = [ pkgs.dconf ];
-  };
-
-  # Additional system services for desktop functionality
-  services.accounts-daemon.enable = true;
-  programs.dconf.enable = true;
 }
