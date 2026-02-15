@@ -1,5 +1,5 @@
 {
-  description = "NixOS configuration with GNOME (Windows 11 style)";
+  description = "NixOS configuration with COSMIC Desktop";
 
   inputs = {
     # NixOS unstable packages
@@ -33,7 +33,7 @@
         specialArgs = { inherit inputs hostname userConfig pkgs-unstable; };
         modules = [
           ./hosts/${hostname}/configuration.nix
-          ./modules/system/gnome.nix
+          ./modules/system/cosmic.nix
           home-manager.nixosModules.home-manager
           {
             home-manager = {

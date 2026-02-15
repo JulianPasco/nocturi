@@ -32,19 +32,11 @@ in {
   time.timeZone = userConfig.timezone;
   i18n.defaultLocale = userConfig.locale;
 
-  # GNOME desktop and GDM are enabled in modules/system/gnome.nix
-
   # Configure console keymap for TTY login
   console.keyMap = "us";
-
-  # XDG Portal configuration moved to modules/system/gnome.nix
   
   # Security and authentication services
   security.polkit.enable = true;
-  services.gnome.gnome-keyring.enable = true;  # Secret service for passwords
-  
-  # Calendar events support
-  services.gnome.evolution-data-server.enable = true;
 
   # Enable printing support
   services.printing = {
