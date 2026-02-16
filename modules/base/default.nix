@@ -142,6 +142,9 @@ in {
   # Firefox with Wayland support
   programs.firefox.enable = true;
   
+  # Chrome SUID sandbox for proper sandboxing
+  security.chromiumSuidSandbox.enable = true;
+  
   # Graphics and hardware acceleration
   hardware.graphics = {
     enable = true;

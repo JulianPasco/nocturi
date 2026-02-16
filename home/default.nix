@@ -96,7 +96,7 @@
         }
     }
 
-    // Start XWayland satellite for X11 apps (Chrome, Windsurf, VSCode)
+    // Start XWayland satellite for X11 apps (Chromium, Windsurf, VSCode)
     spawn-at-startup "xwayland-satellite" ":0"
 
     environment {
@@ -141,8 +141,8 @@
     }
 
     window-rule {
-        // Google Chrome maximized by default  
-        match app-id=r#"[Gg]oogle-chrome"#
+        // Chromium maximized by default  
+        match app-id=r#"[Cc]hromium"#
         open-maximized true
     }
 
@@ -187,7 +187,7 @@
         // Launch applications
         Mod+T { spawn "kitty"; }
         Mod+Return { spawn "kitty"; }
-        Mod+B { spawn "google-chrome-stable"; }
+        Mod+B { spawn "chromium"; }
         Mod+W { spawn "windsurf"; }
         Mod+F { spawn "nautilus"; }
 
@@ -354,7 +354,7 @@
     gedit  #text editor
 
     # Browsers
-    google-chrome
+    chromium
     
     # File manager & GNOME utilities
     nautilus

@@ -22,6 +22,19 @@
   # Prevents printers from appearing disconnected during USB power management
   boot.kernelParams = [ "usbcore.autosuspend=-1" ];
 
+  # Make printer configuration non-critical to avoid blocking system activation
+  # when network printers are unreachable
+  systemd.services.ensure-printers = {
+    unitConfig = {
+      # Allow the service to fail without blocking activation
+      X-StopOnRemoval = false;
+    };
+    serviceConfig = {
+      # Continue even if printer setup fails
+      SuccessExitStatus = "0 1";
+    };
+  };
+
   # Work-specific printers: Canon G1430, Zebra ZD220, and Epson L1455
   hardware.printers = {
     ensurePrinters = [
