@@ -1,8 +1,8 @@
 {
-  description = "NixOS configuration with COSMIC Desktop";
+  description = "NixOS configuration with KDE Plasma Desktop";
 
   inputs = {
-    # Use latest NixOS unstable for COSMIC support (built-in as of 25.05+)
+    # Use latest NixOS unstable
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     
     # Home Manager for user configuration
@@ -25,8 +25,7 @@
         inherit system;
         specialArgs = { inherit inputs hostname userConfig; };
         modules = [
-          ./hosts/${hostname}/configuration.nix
-          ./modules/system/cosmic.nix
+          ./hosts/${hostname}/default.nix
           home-manager.nixosModules.home-manager
           {
             home-manager = {

@@ -183,13 +183,6 @@
     videos = "${config.home.homeDirectory}/Videos";
   };
 
-  # COSMIC Desktop configuration
-  # Link COSMIC settings to make them persistent across rebuilds
-  xdg.configFile."cosmic" = {
-    source = ./cosmic-config/cosmic;
-    recursive = true;
-  };
-
   # Home Manager state version
   home.stateVersion = "25.11";
 }
