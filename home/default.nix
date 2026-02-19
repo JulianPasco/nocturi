@@ -7,7 +7,7 @@
     ./apps.nix          # User application packages
     ./shell.nix         # Bash, Git, Kitty
     ./theming.nix       # GTK / cursor / icon theme
-    ./plasma-win11.nix  # KDE Plasma declarative config
+    ./plasma-win11.nix  # KDE Plasma config (plasma-manager)
   ];
 
   # ── Identity ──────────────────────────────────────────────────────────────

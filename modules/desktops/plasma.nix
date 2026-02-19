@@ -1,10 +1,6 @@
 { config, lib, pkgs, ... }:
 
 {
-  imports = [
-    ./fluent-kde.nix  # Fluent-kde theme + SDDM Fluent theme
-  ];
-
   # Enable KDE Plasma 6 desktop environment
   services.desktopManager.plasma6.enable = true;
   
@@ -48,12 +44,6 @@
     kdePackages.plasma-nm            # NetworkManager applet
     kdePackages.bluedevil            # Bluetooth manager
     
-    # Kvantum theme engine (Qt6 for Plasma 6 — enables window transparency/blur)
-    kdePackages.qtstyleplugin-kvantum
-
-    # Kvantum for Qt5 apps (backwards compatibility)
-    libsForQt5.qtstyleplugin-kvantum
-
     # Browser integration: tabs in taskbar, media controls, download progress
     kdePackages.plasma-browser-integration
 

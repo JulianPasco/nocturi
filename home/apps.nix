@@ -48,10 +48,5 @@
     anydesk
     # rustdesk  # Commented out: takes 30+ min to compile
 
-    # ── Theming (packages referenced by theming.nix) ──────────────────────────
-    fluent-icon-theme   # Windows 11 Fluent icon set
-    fluent-gtk-theme    # Fluent GTK theme
-    bibata-cursors      # Modern cursor theme
-    # Fonts installed system-wide in modules/core/default.nix → fonts.packages
   ];
 }
