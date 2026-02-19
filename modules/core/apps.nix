@@ -17,6 +17,11 @@
     
     # General utilities
     jq
+    
+    # Spellcheck Dictionaries (System-wide for Office apps)
+    hunspell
+    hunspellDicts.en_GB-large
+    hunspellDicts.en_US
   ];
   
   # Firefox with Wayland support

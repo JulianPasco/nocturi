@@ -20,6 +20,4 @@
   # Enable wireless and bluetooth (laptop features)
   hardware.bluetooth.enable = true;
   hardware.bluetooth.powerOnBoot = true;
-
-  # upower service (enabled in core) already provides the upower binary
 }

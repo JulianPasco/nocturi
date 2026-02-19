@@ -20,4 +20,5 @@
 
   # Enable Tailscale VPN
   services.tailscale.enable = true;
+  networking.firewall.checkReversePath = "loose";  # Fix routing for Tailscale exit nodes/subnets
 }

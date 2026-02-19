@@ -4,6 +4,7 @@
   # Enable printing support
   services.printing = {
     enable = true;
+    browsing = true;  # Discover shared printers from other systems
     drivers = with pkgs; [
       splix
       gutenprint
@@ -16,7 +17,7 @@
   # Enable network printer discovery and scanner support
   services.avahi = {
     enable = true;
-    nssmdns4 = true;
+    nssmdns4 = true;  # Resolve .local domains (mdns)
     openFirewall = true;
   };
   

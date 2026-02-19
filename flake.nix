@@ -22,7 +22,6 @@
   outputs = inputs@{ self, nixpkgs, home-manager, plasma-manager, ... }:
     let
       system = "x86_64-linux";
-      pkgs = nixpkgs.legacyPackages.${system};
       
       # Import user configuration
       userConfig = import ./user-config.nix;

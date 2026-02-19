@@ -103,6 +103,10 @@ in
       inter
       noto-fonts
       bibata-cursors
+      # Qt6 dependencies for the theme (crucial for SVG icons / QML components)
+      kdePackages.qtsvg
+      kdePackages.qt5compat
+      kdePackages.qtdeclarative
     ];
   };
 }

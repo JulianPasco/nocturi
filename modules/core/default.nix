@@ -20,6 +20,7 @@ in {
 
   # Bootloader configuration (common for all UEFI systems)
   boot.loader.systemd-boot.enable = true;
+  boot.loader.systemd-boot.configurationLimit = 10;  # Prevent filling up EFI partition
   boot.loader.efi.canTouchEfiVariables = true;
   
   # Intel graphics optimizations for UHD 620 (Whiskey Lake)
@@ -38,6 +39,9 @@ in {
   
   # Security and authentication services
   security.polkit.enable = true;
+
+  # Enable touchpad support (tap-to-click) at login screen (SDDM)
+  services.libinput.enable = true;
 
   # Define user account
   users.users.${userConfig.username} = {
@@ -60,10 +64,26 @@ in {
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
 
+  # Enable nix-ld for running unpatched dynamic binaries
+  programs.nix-ld.enable = true;
+  programs.nix-ld.libraries = with pkgs; [
+    # Common libraries often required by unpatched binaries
+    stdenv.cc.cc
+    zlib
+    fuse3
+    icu
+    zstd
+    nss
+    openssl
+    curl
+    expat
+  ];
+
   # Hardware firmware and SSD optimization
   hardware.enableRedistributableFirmware = true;
   services.fstrim.enable = true;
   services.fwupd.enable = true;
+  services.smartd.enable = true;  # Monitor disk health (SMART)
   
   # Power management services
   services.upower.enable = true;
@@ -165,8 +185,28 @@ in {
       noto-fonts            # Broad Unicode coverage fallback
       noto-fonts-cjk-sans   # CJK fallback
       noto-fonts-color-emoji  # Colour emoji
-      vista-fonts           # Segoe UI — Windows 11 system font
+      vista-fonts           # Calibri, Cambria, Consolas, etc.
       nerd-fonts.jetbrains-mono  # Monospace for terminals
+      inter                 # Required for Fluent SDDM theme
+
+      # Microsoft Fonts & Compatibility (Critical for OnlyOffice/LibreOffice)
+      corefonts             # Microsoft free fonts (Arial, Times, Comic Sans, etc.)
+      liberation_ttf        # Metric-compatible with Arial, Times, Courier
+      caladea               # Metric-compatible with Cambria
+      carlito               # Metric-compatible with Calibri
+      gelasio               # Metric-compatible with Georgia
+      
+      # Common document fonts
+      roboto
+      ubuntu-classic
+      comic-neue
+      lato
+      open-sans
+      montserrat
+      source-sans
+      source-serif
+      dejavu_fonts
+      gyre-fonts            # TeX Gyre (Helvetica/Arial, Times, etc. replacements)
     ];
     fontconfig.defaultFonts = {
       sansSerif = [ "Segoe UI" "Noto Sans" ];
