@@ -83,21 +83,29 @@ in {
   # Force Intel iHD driver for hardware acceleration (better for UHD 620)
   environment.sessionVariables = {
     LIBVA_DRIVER_NAME = "iHD";
+
+    # Electron/Chromium apps (VS Code, Windsurf, Chrome) — native Wayland
+    NIXOS_OZONE_WL           = "1";
+    ELECTRON_OZONE_PLATFORM_HINT = "auto";
+
+    # Firefox native Wayland backend
+    MOZ_ENABLE_WAYLAND = "1";
+
+    # GTK apps use XDG portals → KDE file/colour picker instead of GTK's own
+    GTK_USE_PORTAL = "1";
   };
-  
-  # CPU power management for responsiveness (Intel i7-8565U)
-  powerManagement.cpuFreqGovernor = "schedutil";  # Better than ondemand for interactive workloads
-  services.thermald.enable = true;  # Intel thermal management
-  
-  # DBus services
-  services.dbus = {
-    enable = true;
-    packages = [ pkgs.dconf ];
-  };
-  
+
+  # thermald handles Intel thermal management
+  # power-profiles-daemon manages the CPU governor dynamically (performance/balanced/power-save)
+  # → do NOT also set powerManagement.cpuFreqGovernor; they conflict
+  services.thermald.enable = true;
+
+  # DBus + dconf (programs.dconf.enable already registers the dbus service)
+  services.dbus.enable = true;
+  programs.dconf.enable = true;
+
   # Additional system services for desktop functionality
-  services.accounts-daemon.enable = true;  # User account information
-  programs.dconf.enable = true;             # Settings backend
+  services.accounts-daemon.enable = true;
   
   # Additional nix performance settings (base settings in nix-fast.nix)
   nix.settings = {
@@ -107,9 +115,6 @@ in {
     
     # Logging
     log-lines = 200;                # More context in build logs
-    
-    substituters = [];
-    trusted-public-keys = [];
     
     # Remote builder optimization
     builders-use-substitutes = true;  # Let builders use binary caches
@@ -150,6 +155,24 @@ in {
       "uid=${toString userUid}"
       "gid=${toString userGid}"
     ];
+  };
+
+  # System-wide fonts (available to SDDM, all users, fontconfig)
+  fonts = {
+    enableDefaultPackages = true;
+    fontDir.enable = true;
+    packages = with pkgs; [
+      noto-fonts            # Broad Unicode coverage fallback
+      noto-fonts-cjk-sans   # CJK fallback
+      noto-fonts-color-emoji  # Colour emoji
+      vista-fonts           # Segoe UI — Windows 11 system font
+      nerd-fonts.jetbrains-mono  # Monospace for terminals
+    ];
+    fontconfig.defaultFonts = {
+      sansSerif = [ "Segoe UI" "Noto Sans" ];
+      monospace = [ "JetBrainsMono Nerd Font" "Noto Sans Mono" ];
+      emoji     = [ "Noto Color Emoji" ];
+    };
   };
 
   # This value determines the NixOS release

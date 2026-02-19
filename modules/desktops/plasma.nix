@@ -1,6 +1,10 @@
 { config, lib, pkgs, ... }:
 
 {
+  imports = [
+    ./fluent-kde.nix  # Fluent-kde theme + SDDM Fluent theme
+  ];
+
   # Enable KDE Plasma 6 desktop environment
   services.desktopManager.plasma6.enable = true;
   
@@ -44,17 +48,29 @@
     kdePackages.plasma-nm            # NetworkManager applet
     kdePackages.bluedevil            # Bluetooth manager
     
-    # Additional desktop utilities
-    libsForQt5.qtstyleplugin-kvantum # Theme engine for Qt apps
-    libsForQt5.qt5ct                 # Qt5 configuration tool
+    # Kvantum theme engine (Qt6 for Plasma 6 — enables window transparency/blur)
+    kdePackages.qtstyleplugin-kvantum
+
+    # Kvantum for Qt5 apps (backwards compatibility)
+    libsForQt5.qtstyleplugin-kvantum
+
+    # Browser integration: tabs in taskbar, media controls, download progress
+    kdePackages.plasma-browser-integration
+
+    # KDE print queue manager (4 printers configured)
+    kdePackages.print-manager
+
+    # KDE scanner UI (SANE backend already configured)
+    kdePackages.skanpage
+
   ];
   
   # Enable KWallet for password management
   security.pam.services.sddm.enableKwallet = true;
   
-  # Enable NetworkManager applet
-  programs.nm-applet.enable = true;
-  
+  # KDE Connect — phone integration + firewall ports
+  programs.kdeconnect.enable = true;
+
   # Partition Manager needs polkit rules
   security.polkit.enable = true;
 }

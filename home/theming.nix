@@ -1,9 +1,9 @@
 # GTK theming — Fluent dark (matches Windows 11 dark mode)
-{ pkgs, ... }:
+{ lib, pkgs, ... }:
 
 {
   # Remove stale GTK backup files so home-manager can always activate cleanly
-  home.activation.cleanGtkBackups = pkgs.lib.hm.dag.entryBefore [ "checkFilesChanged" ] ''
+  home.activation.cleanGtkBackups = lib.hm.dag.entryBefore [ "checkFilesChanged" ] ''
     rm -f $HOME/.gtkrc-2.0.backup \
           $HOME/.config/gtk-3.0/settings.ini.backup \
           $HOME/.config/gtk-4.0/settings.ini.backup

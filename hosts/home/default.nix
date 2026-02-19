@@ -7,7 +7,7 @@
     ./hardware.nix
     ../../modules/core
     ../../modules/desktops/plasma.nix
-    ../../modules/nix-fast.nix
+    ../../modules/core/nix-fast.nix
   ];
 
   # Hostname
@@ -21,8 +21,5 @@
   hardware.bluetooth.enable = true;
   hardware.bluetooth.powerOnBoot = true;
 
-  # Add laptop-specific package (battery management)
-  environment.systemPackages = with pkgs; [
-    upower  # Required for battery detection
-  ];
+  # upower service (enabled in core) already provides the upower binary
 }

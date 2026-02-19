@@ -10,9 +10,16 @@
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    # Plasma Manager: declarative KDE Plasma configuration via Home Manager
+    plasma-manager = {
+      url = "github:nix-community/plasma-manager";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.home-manager.follows = "home-manager";
+    };
   };
 
-  outputs = inputs@{ self, nixpkgs, home-manager, ... }:
+  outputs = inputs@{ self, nixpkgs, home-manager, plasma-manager, ... }:
     let
       system = "x86_64-linux";
       pkgs = nixpkgs.legacyPackages.${system};
@@ -33,7 +40,12 @@
               useUserPackages = true;
               backupFileExtension = "backup";  # Backup existing files that would be overwritten
               extraSpecialArgs = { inherit inputs hostname userConfig; };
-              users.${userConfig.username} = import ./home;
+              users.${userConfig.username} = {
+                imports = [
+                  (import ./home)
+                  plasma-manager.homeModules.plasma-manager
+                ];
+              };
             };
           }
         ] ++ extraModules;

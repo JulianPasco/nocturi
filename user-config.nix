@@ -11,10 +11,6 @@
   timezone = "Africa/Johannesburg";  # Change to your timezone (e.g., "America/New_York", "Europe/London")
   locale = "en_ZA.UTF-8";            # Change to your locale (e.g., "en_US.UTF-8", "en_GB.UTF-8")
   
-  # Paths (relative to home directory)
-  wallpaperDir = "Pictures/Wallpaper-Bank/wallpapers";  # Directory containing wallpapers
-  avatarImage = ".face";                  # Avatar image for session menu
-  
   # Host-specific settings
   hostnames = {
     home = "nixos-home";  # Laptop hostname

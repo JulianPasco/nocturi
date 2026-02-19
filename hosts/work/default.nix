@@ -7,7 +7,7 @@
     ./hardware.nix
     ../../modules/core
     ../../modules/desktops/plasma.nix
-    ../../modules/nix-fast.nix
+    ../../modules/core/nix-fast.nix
   ];
 
   # Hostname
@@ -68,4 +68,7 @@
     ];
     ensureDefaultPrinter = "Canon_G1430";
   };
+
+  # Don't fail rebuild when a network printer is temporarily unreachable
+  systemd.services.ensure-printers.serviceConfig.SuccessExitStatus = [ 1 ];
 }

@@ -1,10 +1,9 @@
-{ config, lib, pkgs, userConfig, ... }:
+{ pkgs, ... }:
 
 {
   environment.systemPackages = with pkgs; [
     # CLI utilities
     git
-    alacritty
     fastfetch
     curl
     wget
@@ -18,7 +17,6 @@
     
     # General utilities
     jq
-    colordiff
   ];
   
   # Firefox with Wayland support

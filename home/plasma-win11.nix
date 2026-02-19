@@ -1,5 +1,5 @@
 # Windows 11-style KDE Plasma 6 configuration via plasma-manager
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, userConfig, ... }:
 
 {
   programs.plasma = {
@@ -13,8 +13,8 @@
       # Fluent-round Plasma desktop style (rounded panel/shell chrome)
       theme = "Fluent-round";
 
-      # Dark color scheme (Windows 11 dark mode)
-      colorScheme = "BreezeDark";
+      # Fluent dark color scheme — proper Win11 blue (#0078D4) accent everywhere
+      colorScheme = "FluentDark";
 
       # Fluent dark icons (Windows 11-style icon set)
       iconTheme = "Fluent-dark";
@@ -38,42 +38,67 @@
         right = [ "minimize" "maximize" "close" ];
       };
 
-      # Blur behind transparent windows (Windows 11 acrylic/mica effect)
+      # Blur behind transparent windows (Windows 11 mica/acrylic effect)
       effects = {
         blur = {
           enable = true;
-          strength = 8;
+          strength = 10;              # stronger = more frosted glass
+          noiseStrength = 4;         # subtle noise texture (like Win11 Mica)
         };
+        # Scale animation on open/close (Win11 opens windows with scale+fade)
+        windowOpenClose.animation = "scale";
+        desktopSwitching.animation = "slide";
+        # Squash minimize to taskbar (like Windows 11)
+        minimization.animation = "squash";
         wobblyWindows.enable = false;
         cube.enable = false;
       };
+
+      # Maximized windows fill screen edge-to-edge (no title bar border)
+      borderlessMaximizedWindows = true;
+
+      # Night light — like Windows 11 Night Light (location-based)
+      nightLight = {
+        enable = true;
+        mode = "location";
+        location = {
+          latitude  = toString userConfig.location.latitude;
+          longitude = toString userConfig.location.longitude;
+        };
+        temperature = {
+          day = 6500;
+          night = 3800;
+        };
+        transitionTime = 30;
+      };
     };
 
-    # ── Fonts (Segoe UI-style clean sans-serif) ───────────────────────────────
+    # ── Fonts: Segoe UI 13pt (Windows 11) ───────────────────────────────────
     fonts = {
       general = {
-        family = "Noto Sans";
-        pointSize = 10;
+        family = "Segoe UI";
+        pointSize = 13;
       };
       fixedWidth = {
         family = "JetBrainsMono Nerd Font";
         pointSize = 10;
       };
       small = {
-        family = "Noto Sans";
-        pointSize = 8;
+        family = "Segoe UI";
+        pointSize = 11;
       };
       toolbar = {
-        family = "Noto Sans";
-        pointSize = 10;
+        family = "Segoe UI";
+        pointSize = 13;
       };
       menu = {
-        family = "Noto Sans";
-        pointSize = 10;
+        family = "Segoe UI";
+        pointSize = 13;
       };
       windowTitle = {
-        family = "Noto Sans";
-        pointSize = 10;
+        family = "Segoe UI";
+        pointSize = 13;
+        weight = "medium";
       };
     };
 
@@ -113,17 +138,22 @@
           # System tray (notifications, volume, network, bluetooth, etc.)
           { name = "org.kde.plasma.systemtray"; }
 
-          # Clock (right side, Windows 11 style)
+          # Clock (right side, Windows 11 style — compact, time over date)
           {
             digitalClock = {
               date = {
                 enable = true;
-                format = "shortDate";
+                format = { custom = "ddd d MMM"; };
                 position = "belowTime";
               };
               time = {
                 format = "24h";
                 showSeconds = "never";
+              };
+              # Explicit font keeps the clock compact instead of auto-expanding
+              font = {
+                family = "Segoe UI";
+                size = 13;
               };
               calendar = {
                 firstDayOfWeek = "monday";
@@ -143,18 +173,28 @@
       # Set Kvantum as the Qt widget style (enables transparency/blur in Qt apps)
       "kdeglobals"."KDE"."widgetStyle" = "kvantum";
 
+      # Double-click to open files/folders (Windows 11 default behaviour)
+      "kdeglobals"."KDE"."SingleClick" = false;
+
       # Use the FluentDark Kvantum theme (dark + transparent/blurred windows)
       "Kvantum/kvantum.kvconfig"."General"."theme" = "FluentDark";
 
       # KWin: Fluent-round-dark Aurorae window decoration (Win11 rounded corners)
       "kwinrc"."org.kde.kdecoration2"."library" = "org.kde.kwin.aurorae";
       "kwinrc"."org.kde.kdecoration2"."theme" = "__aurorae__svg__Fluent-round-dark";
+      # NoSides = only the title bar, no side/bottom borders — exactly like Win11
+      "kwinrc"."org.kde.kdecoration2"."BorderSize" = "NoSides";
 
-      # KWin: ensure blur plugin is active (belt-and-suspenders with kwin.effects)
+      # KWin: ensure blur + contrast plugins are active
       "kwinrc"."Plugins"."blurEnabled" = true;
-
-      # KWin: background contrast plugin (mica-like effect on panel/widgets)
       "kwinrc"."Plugins"."contrastEnabled" = true;
+
+      # Snappier animations (closer to Win11 responsiveness)
+      "kwinrc"."Compositing"."AnimationSpeed" = 3;
+
+      # Splash screen — Fluent look-and-feel boot animation
+      "ksplashrc"."KSplash"."Engine" = "KSplashQML";
+      "ksplashrc"."KSplash"."Theme" = "com.github.vinceliuice.Fluent-round-dark";
     };
 
     # ── Power / screen settings ────────────────────────────────────────────

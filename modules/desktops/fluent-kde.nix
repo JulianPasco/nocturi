@@ -75,6 +75,11 @@ let
       cp -r sddm/assets $out/share/sddm/themes/Fluent/
       cp -r sddm/backgrounds $out/share/sddm/themes/Fluent/
 
+      # Fix background path: theme.conf references background.png but it lives
+      # in the backgrounds/ subdirectory. Patch it to the correct relative path.
+      sed -i 's|^background=background\.png|background=backgrounds/background.png|' \
+        $out/share/sddm/themes/Fluent/theme.conf
+
       runHook postInstall
     '';
 
@@ -92,6 +97,12 @@ in
   # SDDM: use the Fluent theme (Windows 11-like login screen)
   services.displayManager.sddm = {
     theme = "Fluent";
-    extraPackages = [ fluent-kde ];
+    extraPackages = with pkgs; [
+      fluent-kde
+      # Fonts needed for the login screen to render correctly
+      inter
+      noto-fonts
+      bibata-cursors
+    ];
   };
 }
