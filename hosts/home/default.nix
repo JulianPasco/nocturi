@@ -21,8 +21,4 @@
   hardware.bluetooth.enable = true;
   hardware.bluetooth.powerOnBoot = true;
 
-  # Add laptop-specific package (battery management)
-  environment.systemPackages = with pkgs; [
-    upower  # Required for battery detection
-  ];
 }

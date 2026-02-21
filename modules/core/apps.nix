@@ -4,7 +4,6 @@
   environment.systemPackages = with pkgs; [
     # CLI utilities
     git
-    alacritty
     fastfetch
     curl
     wget

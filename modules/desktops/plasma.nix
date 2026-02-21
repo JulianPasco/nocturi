@@ -14,17 +14,19 @@
   programs.xwayland.enable = true;  # X11 app compatibility on Wayland
   
   # XDG Desktop Portal (file chooser, screen sharing, etc)
+  # xdg-desktop-portal-kde is auto-added by plasma6; gtk is a fallback for non-KDE apps
   xdg.portal = {
     enable = true;
-    extraPortals = [ 
-      pkgs.xdg-desktop-portal-gtk  # GTK file chooser fallback
-    ];
+    extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
     xdgOpenUsePortal = true;
   };
 
-  # Essential KDE/Plasma packages for complete desktop experience
+  # KDE Connect (phone integration - open firewall ports automatically)
+  programs.kdeconnect.enable = true;
+
+  # KDE/Plasma packages for complete desktop experience
   environment.systemPackages = with pkgs; [
-    # KDE Applications
+    # KDE Core Applications
     kdePackages.dolphin              # File manager
     kdePackages.konsole              # Terminal emulator
     kdePackages.kate                 # Text editor
@@ -33,28 +35,32 @@
     kdePackages.okular               # Document viewer
     kdePackages.gwenview             # Image viewer
     kdePackages.kcalc                # Calculator
-    kdePackages.partitionmanager     # Partition manager (KDE's alternative to GParted)
-    
+    kdePackages.partitionmanager     # Partition manager
+
     # KDE System utilities
     kdePackages.plasma-systemmonitor # System monitor
     kdePackages.kinfocenter          # System information
     kdePackages.filelight            # Disk usage analyzer
-    
+    kdePackages.plasma-disks         # Disk health monitoring (SMART)
+    kdePackages.sddm-kcm             # Login screen settings in System Settings
+
     # KDE Network & Bluetooth
     kdePackages.plasma-nm            # NetworkManager applet
     kdePackages.bluedevil            # Bluetooth manager
-    
-    # Additional desktop utilities
-    libsForQt5.qtstyleplugin-kvantum # Theme engine for Qt apps
-    libsForQt5.qt5ct                 # Qt5 configuration tool
+
+    # Browser integration (requires browser extension)
+    kdePackages.plasma-browser-integration
+
+    # Qt theming — Qt5 legacy apps + Qt6 (Plasma 6 native)
+    kdePackages.qtstyleplugin-kvantum  # Kvantum theme engine for Qt6 apps
+    libsForQt5.qtstyleplugin-kvantum   # Kvantum theme engine for Qt5 legacy apps
+    libsForQt5.qt5ct                   # Qt5 app styling configuration tool
   ];
-  
-  # Enable KWallet for password management
+
+  # KWallet: unlock on SDDM login and on TTY/other login
   security.pam.services.sddm.enableKwallet = true;
-  
-  # Enable NetworkManager applet
-  programs.nm-applet.enable = true;
-  
-  # Partition Manager needs polkit rules
+  security.pam.services.login.enableKwallet = true;
+
+  # Polkit for privileged operations (partition manager, etc.)
   security.polkit.enable = true;
 }

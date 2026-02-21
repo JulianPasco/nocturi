@@ -19,15 +19,10 @@
     vscode
     windsurf  # From nixpkgs unstable
     gh  # GitHub CLI
-    gedit  #text editor
 
     # Browsers
     google-chrome
     
-    # File utilities
-    file-roller        # Archive manager
-    baobab             # Disk usage analyzer
-
     # Media utilities
     playerctl         # Media key support
     
@@ -45,11 +40,8 @@
     popsicle
 
 
-    # Network
-    
     # Office & Productivity
     onlyoffice-desktopeditors
-    evince  # PDF viewer
     
     # Cloud & Sync
     nextcloud-client

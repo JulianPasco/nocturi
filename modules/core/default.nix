@@ -36,9 +36,6 @@ in {
   # Configure console keymap for TTY login
   console.keyMap = "us";
   
-  # Security and authentication services
-  security.polkit.enable = true;
-
   # Define user account
   users.users.${userConfig.username} = {
     isNormalUser = true;
@@ -107,9 +104,6 @@ in {
     
     # Logging
     log-lines = 200;                # More context in build logs
-    
-    substituters = [];
-    trusted-public-keys = [];
     
     # Remote builder optimization
     builders-use-substitutes = true;  # Let builders use binary caches
