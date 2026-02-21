@@ -71,11 +71,17 @@
   home.sessionVariables = {
     NIXOS_OZONE_WL = "1";
     MOZ_ENABLE_WAYLAND = "1";
+    QT_QPA_PLATFORMTHEME = "kde";  # Qt5 apps use KDE styling (consistent decorations)
   };
   
   # GTK theming for compatibility with GTK apps
   gtk = {
     enable = true;
+
+    theme = {
+      name = "Breeze-Dark";
+      package = pkgs.kdePackages.breeze-gtk;  # GTK apps match KDE window style
+    };
     
     cursorTheme = {
       name = "Bibata-Modern-Classic";
