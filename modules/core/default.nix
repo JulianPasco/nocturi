@@ -12,11 +12,13 @@ let
     else userGroup.gid;
 in {
   imports = [
-    ./apps.nix
     ./printing.nix
     ./networking.nix
     ./audio.nix
   ];
+  
+  # Firefox with Wayland support (system-level)
+  programs.firefox.enable = true;
 
   # Bootloader configuration (common for all UEFI systems)
   boot.loader.systemd-boot.enable = true;

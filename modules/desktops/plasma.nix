@@ -8,9 +8,11 @@
   services.displayManager.sddm = {
     enable = true;
     wayland.enable = true;  # Prefer Wayland session
+    theme = "breeze";       # Explicitly use default Breeze theme
   };
   
-  # Wayland support for desktop
+  # X11/Wayland support
+  services.xserver.enable = true;   # X11 input drivers and session support
   programs.xwayland.enable = true;  # X11 app compatibility on Wayland
   
   # XDG Desktop Portal (file chooser, screen sharing, etc)
@@ -23,6 +25,9 @@
 
   # KDE Connect (phone integration - open firewall ports automatically)
   programs.kdeconnect.enable = true;
+
+  # Flatpak support (required for Discover to install Flatpak apps)
+  services.flatpak.enable = true;
 
   # KDE/Plasma packages for complete desktop experience
   environment.systemPackages = with pkgs; [
@@ -51,10 +56,34 @@
     # Browser integration (requires browser extension)
     kdePackages.plasma-browser-integration
 
-    # Qt theming — Qt5 legacy apps + Qt6 (Plasma 6 native)
-    kdePackages.qtstyleplugin-kvantum  # Kvantum theme engine for Qt6 apps
-    libsForQt5.qtstyleplugin-kvantum   # Kvantum theme engine for Qt5 legacy apps
-    libsForQt5.qt5ct                   # Qt5 app styling configuration tool
+    # KDE Store support (themes, extensions, plasmoids, window decorations)
+    kdePackages.discover              # KDE app store (handles KDE Store installs)
+    kdePackages.flatpak-kcm           # Flatpak management in System Settings
+    packagekit                        # Backend for system package installs via Discover
+
+    # Kvantum theme engine (for third-party themes with blur/transparency)
+    kdePackages.qtstyleplugin-kvantum # Qt6 Kvantum (Plasma 6 apps)
+    libsForQt5.qtstyleplugin-kvantum  # Qt5 Kvantum (legacy Qt5 apps)
+
+    # KDE Media
+    kdePackages.elisa              # Music player
+    kdePackages.kdenlive           # Video editor
+    kdePackages.kamera             # Camera device support
+    kdePackages.kamoso             # Webcam app
+    haruna                         # Modern video player (Qt/KDE)
+
+    # KDE Graphics & Photo
+    krita                          # Digital painting
+    kdePackages.kolourpaint        # Simple paint program
+
+    # KDE Productivity
+    kdePackages.merkuro            # Calendar & contacts
+    kdePackages.kget               # Download manager
+    kdePackages.kompare            # Diff/patch tool
+
+    # KDE Remote Desktop
+    kdePackages.krfb               # Desktop sharing (VNC server)
+    kdePackages.krdc               # Remote desktop client
   ];
 
   # KWallet: unlock on SDDM login and on TTY/other login

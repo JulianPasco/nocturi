@@ -1,104 +1,123 @@
 # Home Manager configuration
+# All user applications and programs in one organized file
 { config, lib, pkgs, inputs, hostname, userConfig, ... }:
 
 {
-  # Home Manager basic configuration
+  # ============================================================================
+  # BASIC CONFIGURATION
+  # ============================================================================
+  
   home.username = userConfig.username;
   home.homeDirectory = "/home/${userConfig.username}";
-
-  # Let Home Manager install and manage itself
   programs.home-manager.enable = true;
 
-  # Additional programs to install
+  # ============================================================================
+  # PACKAGES - All applications organized by category
+  # ============================================================================
+  
   home.packages = with pkgs; [
-    # System utilities
+    # --------------------------------------------------------------------------
+    # CLI UTILITIES
+    # --------------------------------------------------------------------------
+    git
+    fastfetch
+    curl
+    wget
+    vim
     htop
     btop
+    usbutils
+    pciutils
+    lshw
+    jq
+    colordiff
     
-    # Development tools
-    vscode
-    windsurf  # From nixpkgs unstable
-    gh  # GitHub CLI
-
-    # Browsers
+    # --------------------------------------------------------------------------
+    # WAYLAND UTILITIES
+    # --------------------------------------------------------------------------
+    wl-clipboard
+    
+    # --------------------------------------------------------------------------
+    # BROWSERS
+    # --------------------------------------------------------------------------
     google-chrome
     
-    # Media utilities
-    playerctl         # Media key support
+    # --------------------------------------------------------------------------
+    # DEVELOPMENT TOOLS
+    # --------------------------------------------------------------------------
+    vscode
+    windsurf
+    gh
+    filezilla
+    github-desktop
     
-    # Media
+    # --------------------------------------------------------------------------
+    # OFFICE & PRODUCTIVITY
+    # --------------------------------------------------------------------------
+    onlyoffice-desktopeditors
+    
+    # --------------------------------------------------------------------------
+    # COMMUNICATION
+    # --------------------------------------------------------------------------
+    zapzap
+    telegram-desktop
+    
+    # --------------------------------------------------------------------------
+    # CLOUD & SYNC
+    # --------------------------------------------------------------------------
+    nextcloud-client
+    
+    # --------------------------------------------------------------------------
+    # MEDIA
+    # --------------------------------------------------------------------------
     mpv
     pavucontrol
+    playerctl
     
-    # Graphics & Photo Printing
+    # --------------------------------------------------------------------------
+    # GRAPHICS & PHOTO
+    # --------------------------------------------------------------------------
     gimp
-
-    # Disk tools
+    
+    # --------------------------------------------------------------------------
+    # DISK TOOLS
+    # --------------------------------------------------------------------------
     gparted
     gsmartcontrol
     smartmontools
     popsicle
-
-
-    # Office & Productivity
-    onlyoffice-desktopeditors
     
-    # Cloud & Sync
-    nextcloud-client
-    
-    # Communication
-    zapzap  # WhatsApp client
-    telegram-desktop
-    
-    # Security & Password Management
+    # --------------------------------------------------------------------------
+    # SECURITY & PASSWORD MANAGEMENT
+    # --------------------------------------------------------------------------
     bitwarden-desktop
     bitwarden-cli
     
-    # Remote Desktop
-    # rustdesk  # Commented out: takes 30+ min to compile
+    # --------------------------------------------------------------------------
+    # REMOTE DESKTOP
+    # --------------------------------------------------------------------------
     anydesk
-    # deskflow  # Removed: potential bloat/input interference
     
-    # File Transfer & Development
-    filezilla
-    github-desktop
-    
-    # Fonts
-    nerd-fonts.jetbrains-mono  # JetBrains Mono Nerd Font
+    # --------------------------------------------------------------------------
+    # FONTS
+    # --------------------------------------------------------------------------
+    nerd-fonts.jetbrains-mono
   ];
 
-  # Session variables for Wayland
+  # ============================================================================
+  # ENVIRONMENT & SESSION VARIABLES
+  # ============================================================================
+  
   home.sessionVariables = {
     NIXOS_OZONE_WL = "1";
     MOZ_ENABLE_WAYLAND = "1";
-    QT_QPA_PLATFORMTHEME = "kde";  # Qt5 apps use KDE styling (consistent decorations)
   };
+
+  # ============================================================================
+  # PROGRAM CONFIGURATIONS
+  # ============================================================================
   
-  # GTK theming for compatibility with GTK apps
-  gtk = {
-    enable = true;
-
-    theme = {
-      name = "Breeze-Dark";
-      package = pkgs.kdePackages.breeze-gtk;  # GTK apps match KDE window style
-    };
-    
-    cursorTheme = {
-      name = "Bibata-Modern-Classic";
-      package = pkgs.bibata-cursors;
-      size = 24;
-    };
-    
-    gtk3.extraConfig = {
-      gtk-application-prefer-dark-theme = true;
-    };
-    
-    gtk4.extraConfig = {
-      gtk-application-prefer-dark-theme = true;
-    };
-  };
-
-  # Configure Git
+  # Git configuration
   programs.git = {
     enable = true;
     settings = {
@@ -109,18 +128,10 @@
     };
   };
 
-  # Configure terminal emulator (Kitty)
-  programs.kitty = {
-    enable = true;
-    settings = {
-      font_family = "JetBrainsMono Nerd Font";
-      font_size = 13;
-      enable_audio_bell = false;
-      background_opacity = "0.80";
-    };
-  };
+  # Terminal emulator (Kitty)
+  programs.kitty.enable = true;
 
-  # Configure bash
+  # Bash shell configuration
   programs.bash = {
     enable = true;
     shellAliases = {
@@ -168,19 +179,25 @@
     '';
   };
 
+  # ============================================================================
+  # XDG CONFIGURATION
+  # ============================================================================
+  
   xdg = {
     enable = true;
+    
+    userDirs = {
+      enable = true;
+      documents = "${config.home.homeDirectory}/Documents";
+      download = "${config.home.homeDirectory}/Downloads";
+      pictures = "${config.home.homeDirectory}/Pictures";
+      videos = "${config.home.homeDirectory}/Videos";
+    };
   };
 
-  # Configure XDG directories
-  xdg.userDirs = {
-    enable = true;
-    documents = "${config.home.homeDirectory}/Documents";
-    download = "${config.home.homeDirectory}/Downloads";
-    pictures = "${config.home.homeDirectory}/Pictures";
-    videos = "${config.home.homeDirectory}/Videos";
-  };
-
-  # Home Manager state version
+  # ============================================================================
+  # STATE VERSION
+  # ============================================================================
+  
   home.stateVersion = "25.11";
 }

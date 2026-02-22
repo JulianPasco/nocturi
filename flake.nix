@@ -31,7 +31,18 @@
             home-manager = {
               useGlobalPkgs = true;
               useUserPackages = true;
-              backupFileExtension = "backup";  # Backup existing files that would be overwritten
+              backupFileExtension = null;
+              backupCommand = ''
+                if [[ -e "$1" ]]; then
+                  backup="$1.backup"
+                  counter=1
+                  while [[ -e "$backup" ]]; do
+                    backup="$1.backup.$counter"
+                    ((counter++))
+                  done
+                  mv "$1" "$backup"
+                fi
+              '';
               extraSpecialArgs = { inherit inputs hostname userConfig; };
               users.${userConfig.username} = import ./home;
             };

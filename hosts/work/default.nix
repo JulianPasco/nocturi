@@ -23,6 +23,14 @@
   # Prevents printers from appearing disconnected during USB power management
   boot.kernelParams = [ "usbcore.autosuspend=-1" ];
 
+  # Allow printer service to fail gracefully if printers are offline
+  systemd.services.ensure-printers = {
+    serviceConfig = {
+      Restart = "no";
+      SuccessExitStatus = "0 1";
+    };
+  };
+
   # Work-specific printers: Canon G1430, Zebra ZD220, and Epson L1455
   hardware.printers = {
     ensurePrinters = [
@@ -59,7 +67,7 @@
         name = "Samsung_X4300LX";
         location = "Office";
         deviceUri = "ipp://192.168.2.115/ipp/printer";
-        model = "everywhere";  # IPP Everywhere (driverless, color, duplex)
+        model = "everywhere";
         ppdOptions = {
           PageSize = "A4";
           MediaType = "PLAIN_NORMAL";
