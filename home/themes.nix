@@ -50,6 +50,7 @@ let
       runHook preInstall
       mkdir -p $out/share/icons
       bash install.sh -d $out/share/icons -t pink
+      find $out -xtype l -delete
       runHook postInstall
     '';
   };
