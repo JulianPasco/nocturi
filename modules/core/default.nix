@@ -52,9 +52,12 @@ in {
       "dialout"      # Serial port access
       "scanner"      # Scanner access
       "lp"           # Printer/scanner access
+      "vboxusers"    # VirtualBox host access
     ];
     packages = with pkgs; [];
   };
+
+  virtualisation.virtualbox.host.enable = true;
 
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
