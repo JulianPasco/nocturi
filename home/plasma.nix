@@ -46,7 +46,7 @@
           { name = "org.kde.plasma.pager"; }
           {
             name = "org.kde.plasma.icontasks";
-            config.General.launchers = "applications:systemsettings.desktop,preferred://filemanager,preferred://browser,applications:com.rtosta.zapzap.desktop";
+            config.General.launchers = "applications:systemsettings.desktop,preferred://filemanager,preferred://browser,applications:com.rtosta.zapzap.desktop,applications:org.kde.konsole.desktop,applications:windsurf.desktop,applications:onlyoffice-desktopeditors.desktop";
           }
           { name = "org.kde.plasma.marginseparator"; }
           { name = "org.kde.plasma.systemtray"; }
@@ -75,6 +75,11 @@
 
     configFile = {
       "kdeglobals"."KDE"."AnimationDurationFactor" = 0;
+
+      "kactivitymanagerd-statsrc"."Favorites-org.kde.plasma.kickoff.favorites.instance-154-6a9de4b8-8443-42cd-82f0-96383c68f821"."ordering" = "applications:org.kde.discover.desktop,applications:org.kde.dolphin.desktop,applications:systemsettings.desktop,preferred://browser,applications:AnyDesk.desktop,applications:firefox.desktop";
+      "kactivitymanagerd-statsrc"."Favorites-org.kde.plasma.kickoff.favorites.instance-154-global"."ordering" = "applications:org.kde.discover.desktop,applications:org.kde.dolphin.desktop,applications:systemsettings.desktop,preferred://browser,applications:AnyDesk.desktop,applications:firefox.desktop";
+      "kactivitymanagerd-statsrc"."Favorites-org.kde.plasma.kickoff.favorites.instance-3-6a9de4b8-8443-42cd-82f0-96383c68f821"."ordering" = "applications:org.kde.discover.desktop,applications:org.kde.dolphin.desktop,applications:systemsettings.desktop,preferred://browser,applications:AnyDesk.desktop,applications:firefox.desktop";
+      "kactivitymanagerd-statsrc"."Favorites-org.kde.plasma.kickoff.favorites.instance-3-global"."ordering" = "applications:org.kde.discover.desktop,applications:org.kde.dolphin.desktop,applications:systemsettings.desktop,preferred://browser,applications:AnyDesk.desktop,applications:firefox.desktop";
 
       "kwinrc"."Windows"."ElectricBorderCooldown" = 175;
       "kwinrc"."Xwayland"."Scale" = 1;
