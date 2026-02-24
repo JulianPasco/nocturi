@@ -19,6 +19,12 @@
     nssmdns4 = true;
     openFirewall = true;
   };
+
+  systemd.services.avahi-daemon.serviceConfig.PermissionsStartOnly = true;
+
+  systemd.services.avahi-daemon.preStart = lib.mkAfter ''
+    rm -f /run/avahi-daemon/pid || true
+  '';
   
   # Enable scanner support (SANE)
   hardware.sane = {

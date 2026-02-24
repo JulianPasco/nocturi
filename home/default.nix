@@ -28,6 +28,7 @@
     fastfetch
     curl
     wget
+    nmap
     vim
     htop
     btop
