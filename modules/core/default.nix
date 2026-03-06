@@ -24,11 +24,14 @@ in {
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
   
-  # Intel graphics optimizations for UHD 620 (Whiskey Lake)
+  # AMD graphics configuration for Radeon R9 290 (Hawaii PRO / CIK / Sea Islands / GCN 2.0)
+  # amdgpu does not bind to CIK-gen cards by default — explicit opt-in required
+  boot.kernelModules = [ "amdgpu" ];
+  boot.blacklistedKernelModules = [ "radeon" ];  # Prevent legacy radeon driver from loading
   boot.kernelParams = [
-    "i915.fastboot=1"           # Faster boot with display state preservation
-    "i915.enable_fbc=1"         # Framebuffer compression (power + performance)
-    "i915.enable_psr=2"         # Panel Self Refresh for power savings
+    "radeon.cik_support=0"     # Ensure radeon does not claim CIK cards
+    "amdgpu.cik_support=1"     # Enable amdgpu for CIK cards (R9 290, R9 270, HD 7xxx)
+    "amdgpu.dc=1"              # Enable Display Core for better performance
   ];
 
   # Time zone and locale
@@ -76,18 +79,14 @@ in {
     enable = true;
     enable32Bit = true;  # For 32-bit apps and games
     extraPackages = with pkgs; [
-      intel-media-driver  # LIBVA_DRIVER_NAME=iHD (modern)
-      intel-vaapi-driver  # LIBVA_DRIVER_NAME=i965 (legacy)
+      rocmPackages.clr.icd  # AMD OpenCL
       libvdpau-va-gl
     ];
   };
   
-  # Force Intel iHD driver for hardware acceleration (better for UHD 620)
-  environment.sessionVariables = {
-    LIBVA_DRIVER_NAME = "iHD";
-  };
+  # AMD graphics environment variables (RADV Vulkan driver enabled by default via Mesa)
   
-  # CPU power management for responsiveness (Intel i7-8565U)
+  # CPU power management
   powerManagement.cpuFreqGovernor = "schedutil";  # Better than ondemand for interactive workloads
   services.thermald.enable = true;  # Intel thermal management
   

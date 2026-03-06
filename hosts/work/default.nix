@@ -1,6 +1,6 @@
 # Work PC specific configuration
 # Only contains differences from base configuration
-{ config, pkgs, inputs, hostname, userConfig, ... }:
+{ config, lib, pkgs, inputs, hostname, userConfig, ... }:
 
 {
   imports = [
@@ -18,6 +18,26 @@
 
   # No LUKS encryption on work desktop
   # (add here if work PC gets encrypted later)
+
+  # Work PC hardware: Intel i9-9900KF (Coffee Lake, 8-core, no iGPU)
+  # Ethernet: Intel I219-V (e1000e), Audio: Intel 200-series PCH HDA,
+  # GPU: AMD Radeon R9 290, NVMe: Silicon Motion SM2263EN, USB: ASMedia ASM3142
+  boot.kernelModules = [ "e1000e" ];  # Intel I219-V Ethernet
+  hardware.enableAllFirmware = true;   # Full firmware coverage (incl. non-redistributable)
+
+  # GPU diagnostics and benchmarking tools
+  environment.systemPackages = with pkgs; [
+    radeontop      # Real-time AMD GPU usage monitor (like htop for GPU)
+    mesa-demos     # glxinfo + glxgears for OpenGL driver verification
+    glmark2        # OpenGL benchmark / stress test
+    vkmark         # Vulkan benchmark / stress test
+    vulkan-tools   # vulkaninfo to inspect Vulkan driver capabilities
+  ];
+
+  # Desktop performance: no battery concerns on i9-9900KF
+  powerManagement.cpuFreqGovernor = lib.mkForce "performance";
+  # power-profiles-daemon not needed on desktop, thermald handles CPU thermals
+  services.power-profiles-daemon.enable = lib.mkForce false;
 
   # Fix USB autosuspend issue with printers
   # Prevents printers from appearing disconnected during USB power management

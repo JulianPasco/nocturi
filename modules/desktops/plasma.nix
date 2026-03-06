@@ -71,6 +71,7 @@
     kdePackages.kamera             # Camera device support
     kdePackages.kamoso             # Webcam app
     haruna                         # Modern video player (Qt/KDE)
+    hypnotix                       # IPTV streaming app
 
     # KDE Graphics & Photo
     krita                          # Digital painting
