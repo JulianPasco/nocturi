@@ -76,6 +76,7 @@
     # KDE Graphics & Photo
     krita                          # Digital painting
     kdePackages.kolourpaint        # Simple paint program
+    digikam                        # Photo manager with print wizard
 
     # KDE Productivity
     kdePackages.merkuro            # Calendar & contacts
