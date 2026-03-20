@@ -30,7 +30,6 @@
     radeontop      # Real-time AMD GPU usage monitor (like htop for GPU)
     mesa-demos     # glxinfo + glxgears for OpenGL driver verification
     glmark2        # OpenGL benchmark / stress test
-    vkmark         # Vulkan benchmark / stress test
     vulkan-tools   # vulkaninfo to inspect Vulkan driver capabilities
   ];
 
